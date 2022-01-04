@@ -23,18 +23,17 @@ agent_combinations = list(combinations(agents_list, 2))
 grid = np.array(grid_maze)
 
 # compute all paths using low level A* search 
+conflicts = []
 all_solutions = {}
 for agent in agents_data:
     start = agents_data[agent][0]
     end = agents_data[agent][1]
     
-    route = astar(grid, start, end)
+    route = astar(grid, start, end, conflicts)
     route = route + [start]             # add start position
     route = route[::-1]                 # reverse solution 
 
     all_solutions[agent] = route
-
-conflicts = []
 
 # create root node 
 root_node = ConflictNode(conflicts, all_solutions)
@@ -68,7 +67,7 @@ while True:
         path2 = current_node.all_solutions[agent2]
 
         conflicts = computeConflicts(agent1, agent2, path1, path2)
-        
+
         # resolve conflict for one agent combination
         if conflicts != []:
             
@@ -106,7 +105,7 @@ while True:
 
             break
 
-# for i in goal_node.all_solutions:
-#     print(i, ": ", goal_node.all_solutions[i])
+for i in goal_node.all_solutions:
+    print(i, ": ", goal_node.all_solutions[i])
 
-print(goal_node.all_solutions)
+# print(goal_node.all_solutions)
