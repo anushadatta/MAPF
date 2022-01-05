@@ -11,9 +11,9 @@ from itertools import combinations
 # Agents { agent #: [(start), (goal)]}
 agents_data = {
     1: [(0,1),(3,2)],
-    2: [(1,0), (2,3)],
-    3: [(0,2), (1,2)],
-    4: [(1,1),(0,2)]
+    # 2: [(1,0), (2,3)],
+    # 3: [(0,2), (1,2)],
+    # 4: [(1,1),(0,2)]
 }
 
 agents_list = list(agents_data.keys())

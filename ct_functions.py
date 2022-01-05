@@ -13,8 +13,8 @@ def computeConflicts(agent1, agent2, path1, path2):
             
             # conflict found
             if position1 == position2:
-                conflicts.append([agent1, position1, timestamp])
-                conflicts.append([agent2, position1, timestamp])
+                conflicts.append([agent1, position1, timestamp, 'position'])
+                conflicts.append([agent2, position1, timestamp, 'position'])
 
                 return conflicts
         
@@ -28,8 +28,8 @@ def computeConflicts(agent1, agent2, path1, path2):
 
             # edge conflict found
             if (agent1_position1 == agent2_position2) and (agent1_position2 == agent2_position1):
-                conflicts.append([agent1, agent1_position2, timestamp+1])
-                conflicts.append([agent2, agent2_position2, timestamp+1])
+                conflicts.append([agent1, [agent1_position1, agent1_position2], timestamp, 'edge'])
+                conflicts.append([agent2, [agent1_position2, agent2_position2], timestamp, 'edge'])
                 return conflicts
 
         return conflicts # = []
@@ -54,6 +54,7 @@ def find_leaf_nodes(root_node):
 def ct_goal_node(leaf_nodes, agent_combinations):
     
     goal_nodes = []
+    conflicts = []
 
     for node in leaf_nodes:
         for combination in agent_combinations:
