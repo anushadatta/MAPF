@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MAPF | Anusha Datta</title>
+
+    <!-- Favicon, CSS -->
+    <link rel="icon" href="assets/favicon-grid.png" type="image/png" sizes="16x16">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/main-page.css">
+
+    <!-- JS -->
+    <script src="js/utilities.js" defer></script>
+    <script src="js/statistics.js" defer></script>
+    <script src="js/maze-generation.js" defer></script>
+    <script src="js/maze-visualization.js" defer></script>
+    <script src="js/mazeGenerationAlgos/RandomizedHorizontals.js"></script>
+    <script src="js/mazeGenerationAlgos/RandomizedVerticals.js"></script>
+    <script src="js/mazeGenerationAlgos/RecursiveDivision.js"></script>
+
+    <!-- Font Awesome icons CDN -->
+    <script src="https://use.fontawesome.com/4e51920be5.js"></script>
+
+    <!-- p5.js -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+
+    <!-- Statistics Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="getSavedMazes()">
+
+    <!-- Landing page -->
+    <header id="home" class="showcase">
+        <div class="content">
+
+            <h1 class="title">
+                Multi Agent Path Finding (MAPF)
+            </h1>
+            <hr class="center">
+            <p class="text">
+                Conflict Based Search Algorithm | By Anusha Datta
+            </p>
+        </div>
+
+        <!-- Scroll arrow -->
+        <a href="#navbar"> <img src="assets/arrow.png" class="arrow" alt="scroll"> </a>
+
+    </header>
+
+    <!-- Navigation Bar -->
+    <div id="navbar" class="sticky-navbar">
+        <ul>
+            <li>
+                <a href="#home">HOME</a>
+            </li>
+            <li>
+                <a href="#about">ABOUT</a>
+            </li>
+            <li>
+                <a href="#mapf">MAPF</a>
+            </li>
+            <li>
+                <a href="#statistics">STATISTICS</a>
+            </li>
+            <li>
+                <a href="#mazes">MAZES</a>
+            </li>
+            
+            <img src="assets/favicon-grid.png" class="navbar-logo">
+
+        </ul>
+    </div>
+
+    <!-- About -->
+    <section id="about" class="bg-light">
+        <div class="container">
+            <h1>ABOUT</h1>
+
+            <div class="grid-2">
+                <div class="center">
+                    <img src="assets/about-grid.jpeg" alt="Profile Picture">
+                </div>
+
+                <div>
+                    <h3>Conflict Based Search for Optimal MAPF</h3>
+                    <p> Introduction to MAPF application.
+                        <br> <br>
+                        Instructions to use application. 
+                    </p>
+                    </div>
+            </div>
+        </div>
+        <hr class="center">
+    </section>
+
+    <!-- MAPF -->
+    <section id="mapf" class="bg-light">
+        <div class="container">
+            <h1>MULTI AGENT PATH FINDING (MAPF)</h1>
+            <p>Follow the instructions above to run the MAPF simulation below.</p>
+
+            <p><b>Maze Generation</b></p>
+            <!-- Maze Generation -->
+            <div style="display:inline">
+                Select Maze Generation Algorithm:
+                <select id="maze-generation-algo">
+                    <option value="rv">Randomised Verticals</option>
+                    <option value="rh">Randomised Horizontals</option>
+                    <option value="rd">Recursive Division</option>
+                </select>
+            </div>
+            <button onclick="maze_flag=true" data-inline="true">Go</button>
+
+            <br> 
+
+            <!-- Load Saved Mazes -->
+            <div style="display:inline">
+                Load Saved Maze:
+                <select>
+                    <option>Maze 1</option>
+                    <option>Maze 2</option>
+                    <option>Maze 3</option>
+                </select>
+            </div>
+            <button onclick="getStats()" data-inline="true">Go</button>
+
+            <br>
+
+            <!-- Edit Maze -->
+            <button onClick="onClickFlag='maze';">Toggle obstacle</button>
+
+            <!-- Save current maze -->
+            <button onClick="">Save Current Maze</button>
+
+            <br>
+
+            <!-- Clear Maze -->
+            <button>Clear Animation</button>
+            <button onClick="clear_flag=true">Reset Maze</button>
+
+            <!-- MAPF variables -->
+            <p><b>MAPF Variables</b></p>
+
+            
+            <div>
+                Select Number of Agents (Max. 15):
+                <input id="numAgents" type="number" min="1" max="15" onchange="updateDropdown()">
+            </div>
+
+            <div>
+                Select Low Level Path Solver:
+                <select>
+                    <option>A* Search</option>
+                </select>
+            </div>
+
+            <!-- Place Agent -->
+            <div style="display:inline">
+                Select Agent to place on Maze:
+                <select id="agent_dropdown">
+                </select>
+            </div>
+
+            <button onclick="onClickFlag='agent';">Select Start Position</button>
+            <button onclick="console.log(graph);">Select Goal Position</button>
+            
+            <!-- MAZE!!! -->
+            <div id="main-maze"></div>
+
+            <!-- MAPF Solution Cost/Time -->
+            <button>Solve</button>
+
+            <br> 
+
+            <div class="center">
+                <div class="solution-badges">
+                    <span class="name" color="primary">Execution Cost</span>
+                    <span class="score">N/A</span>
+                </div>
+                
+                <div class="solution-badges">
+                    <span class="name" color="primary">Execution Time</span>
+                    <span class="score">N/A</span>
+                </div>
+            </div>
+
+        </div>
+        <hr class="center">
+    </section>
+
+    <!-- Statistics -->
+    <section id="statistics" class="bg-light">
+        <div class="container">
+            <h1>MAPF STATISTICS</h1>
+            <p>View MAPF algorithm execution statistics for saved mazes.</p>
+
+            
+            <div id="select_maze" style="display:inline"></div>
+            <button onclick="getStats()" data-inline="true">Go</button>
+            
+            
+            <canvas id="myChart" style="width:100%" class="center"></canvas>
+        </div>
+
+        <hr class="center">
+    </section>
+
+    <!-- Mazes -->
+    <section id="mazes" class="bg-light">
+        <div class="container">
+            <h1>MAZES</h1>
+            <p>View, add (user input), edit, and delete saved mazes on cloud DB. </p>
+        </div>
+
+        <hr class="center">
+    </section>
+
+    <!-- Contact -->
+    <section class="bg-light" id="contact">
+        <div class="container center">
+
+            <h2>Get in Touch</h2>
+            <p>Please feel free to reach out for any questions, feedback or collaboration!</p>
+
+            <a href="mailto:anushadatta@gmail.com"><i class="fa fa-envelope"></i></a>
+
+            <a href="https://www.linkedin.com/in/anusha-datta/" target="_blank"><i class="fa fa-linkedin"></i></a>
+
+            <a href="https://github.com/anushadatta" target="_blank"><i class="fa fa-github"></i></a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="center bg-dark">
+        <p>MAPF | Anusha Datta &copy; 2022</p>
+    </footer>
+
+</body>
+
+</html>
