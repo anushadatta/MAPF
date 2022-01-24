@@ -28,8 +28,8 @@ def computeConflicts(agent1, agent2, path1, path2):
 
             # edge conflict found
             if (agent1_position1 == agent2_position2) and (agent1_position2 == agent2_position1):
-                conflicts.append([agent1, [agent1_position1, agent1_position2], timestamp, 'edge'])
-                conflicts.append([agent2, [agent1_position2, agent2_position2], timestamp, 'edge'])
+                conflicts.append([agent1, [agent1_position1, agent1_position2], timestamp+1, 'edge'])
+                conflicts.append([agent2, [agent1_position2, agent2_position2], timestamp+1, 'edge'])
                 return conflicts
 
         return conflicts # = []
@@ -42,9 +42,12 @@ def find_leaf_nodes(root_node):
         if node is not None:
             if node.left== None and node.right==None:
                 leaf_nodes.append(node)
+                return
             else:
                 _get_leaf_nodes(node.left)
                 _get_leaf_nodes(node.right)
+                return
+        return
     
     _get_leaf_nodes(root_node)
     
@@ -55,18 +58,22 @@ def ct_goal_node(leaf_nodes, agent_combinations):
     
     goal_nodes = []
     conflicts = []
+    conflicts_flag = False
 
     for node in leaf_nodes:
+        
         for combination in agent_combinations:
             agent1 = combination[0]
             agent2 = combination[1]
-
+            
             path1 = node.all_solutions[agent1]
             path2 = node.all_solutions[agent2]
 
             conflicts = computeConflicts(agent1, agent2, path1, path2)
+            if conflicts!=[]:
+                conflicts_flag = True
 
-        if conflicts == []:
+        if conflicts_flag == False:
             goal_nodes.append(node)
     
     if goal_nodes == []:
@@ -116,14 +123,15 @@ def filter_conflicts(conflicts, agent):
     return agent_conflicts
 
 # compute solution for agent given new constraints
-def compute_updated_solution(agent, agent_positions, conflicts, grid_maze, current_path):
+def compute_updated_solution(agent, agent_positions, conflicts, grid_maze):
     
     # compute updated path
     start = agent_positions[0]
     end = agent_positions[1]
     agent_conflicts = filter_conflicts(conflicts, agent)
-
+    
     path = astar(grid_maze, start, end, agent_conflicts)
+    # print(agent, start, end, agent_conflicts)
     path = path + [start]             # add start position
     path = path[::-1]                 # reverse solution 
 

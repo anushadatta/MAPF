@@ -11,9 +11,9 @@ from itertools import combinations
 # Agents { agent #: [(start), (goal)]}
 agents_data = {
     1: [(0,1),(3,2)],
-    # 2: [(1,0), (2,3)],
-    # 3: [(0,2), (1,2)],
-    # 4: [(1,1),(0,2)]
+    2: [(1,0), (2,3)],
+    3: [(0,2), (1,2)],
+    4: [(1,1),(0,2)]
 }
 
 agents_list = list(agents_data.keys())
@@ -51,7 +51,7 @@ while True:
 
     # search for goal node (no conflict)
     goal_node = ct_goal_node(leaf_nodes, agent_combinations)
-
+    
     if goal_node!= None:
         break
 
@@ -60,6 +60,7 @@ while True:
 
     # find conflicts
     for combination in agent_combinations:
+        
         agent1 = combination[0]
         agent2 = combination[1]
 
@@ -82,8 +83,7 @@ while True:
                 agent1, 
                 agent_positions, 
                 updated_conflicts, 
-                grid_maze, 
-                path1)
+                grid)
 
             current_node.right = ConflictNode(updated_conflicts, updated_solutions)
             current_node.right.computeTotalCost()
@@ -97,8 +97,7 @@ while True:
                 agent2,             # current agent number
                 agent_positions,    # start/end positions
                 updated_conflicts,  
-                grid_maze,          # [[]]: convert to np.array()
-                path2)              # current agent solution 
+                grid)              
             
             current_node.left = ConflictNode(updated_conflicts, updated_solutions)
             current_node.right.computeTotalCost()
