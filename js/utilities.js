@@ -4,7 +4,9 @@ const updateDropdown = ()=>{
 
     const dropdownNode = document.getElementById("agent_dropdown");
     dropdownNode.innerHTML="";
+
     for(let i=1; i<=numAgents; i++){
+        agentPositions.push([false,false]);
         const optionNode = document.createElement("option");
         optionNode.innerHTML=`Agent ${i}`;
         optionNode.setAttribute("value",i);

@@ -9,7 +9,7 @@ let maze_flag = false;
 let clear_flag = false;
 let onClickFlag = "maze";
 let place = () => { };
-let agents = [];
+let agentPositions = [];
 const HEIGHT = 500; //pixels
 const WIDTH = 950; //pixels
 const mazeHeight = 31; //units
@@ -23,6 +23,11 @@ const maze_generation_algos = {
 }
 // function to initialize the maze and the grid
 function initGrid(p5) {
+    const numAgents = document.getElementById("numAgents").value;
+    agentPositions=[];
+    for(let i=0;i<numAgents;i++){
+        agentPositions.push([false,false])
+    }
     graph = []
 
     for (let i = 0; i < mazeHeight; i++) {
@@ -100,12 +105,36 @@ const placeMazeWall = (p5, index) => {
         colourBox(p5, index, 255);
     }
 };
+
 const placeAgentStart=(p5,index)=>{
-    if (graph[index[0]][index[1]] === EMPTY) {
+
+    let agent_number = document.getElementById("agent_dropdown").value;
+    let agent_color = agent_colors[agent_number-1][0]
+
+    if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][0]) {
         graph[index[0]][index[1]] = AGENT;
-        colourBox(p5, index, [255,0,0]);
-    } else if (graph[index[0]][index[1]] === AGENT) {
+        agentPositions[agent_number][0]=index;
+        colourBox(p5, index, agent_color);
+    } else if (graph[index[0]][index[1]] === AGENT && index[0]==agentPositions[agent_number][0][0] &&index[1]==agentPositions[agent_number][0][1]) {
         graph[index[0]][index[1]] = EMPTY;
+        agentPositions[agent_number][0]=false;
+        colourBox(p5, index, 255);
+    }
+}
+
+const placeAgentGoal=(p5,index)=>{
+
+    let agent_number = document.getElementById("agent_dropdown").value;
+    let agent_color = agent_colors[agent_number-1][1]
+
+    if (graph[index[0]][index[1]] === EMPTY&& !agentPositions[agent_number][1]) {
+        graph[index[0]][index[1]] = AGENT;
+        agentPositions[agent_number][1]=index;
+
+        colourBox(p5, index, agent_color);
+    } else if (graph[index[0]][index[1]] === AGENT && index[0]==agentPositions[agent_number][1][0] &&index[1]==agentPositions[agent_number][1][1]) {
+        graph[index[0]][index[1]] = EMPTY;
+        agentPositions[agent_number][1]=false;
         colourBox(p5, index, 255);
     }
 }
@@ -126,7 +155,7 @@ const placeMazeWallOnClick = p5 => {
     place = () => { };
 };
 // place agent on Click
-const placeAgentOnClick = p5 => {
+const placeAgentStartOnClick = p5 => {
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -134,8 +163,24 @@ const placeAgentOnClick = p5 => {
         index[0] >= 0 &&
         index[1] < mazeWidth &&
         index[1] >= 0
-    ) {
+    ) { 
         placeAgentStart(p5, index);
+    }
+
+    place = () => { };
+};
+
+// place agent on Click
+const placeAgentEndOnClick = p5 => {
+    let index = calculateIndex(p5.mouseX, p5.mouseY);
+
+    if (
+        index[0] < mazeHeight &&
+        index[0] >= 0 &&
+        index[1] < mazeWidth &&
+        index[1] >= 0
+    ) { 
+        placeAgentGoal(p5, index);
     }
 
     place = () => { };
@@ -145,7 +190,8 @@ const placeAgentOnClick = p5 => {
 // the global flag is decided from the buttons
 const onTouchFunctions = {
     "maze":placeMazeWallOnClick,
-    "agent":placeAgentOnClick
+    "agent_start":placeAgentStartOnClick,
+    "agent_end":placeAgentEndOnClick,
 }
 
 
