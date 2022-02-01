@@ -59,7 +59,7 @@ Resources:
   SolverFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: solver/
+      CodeUri: mapf/
       Events:
         ApiEvent:
           Type: Api 

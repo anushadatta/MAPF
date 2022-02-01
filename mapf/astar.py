@@ -115,20 +115,20 @@ def astar(array, start, goal, constraints):
     
     return None
 
+if __name__ == "__main__":
+    from grid import *
+    grid = np.array(grid_maze)
+    route = astar(grid, (1,0), (2,3), [[2, (1, 1), 1, 'position'], [2, (2, 2), 3, 'position'], [2, (2, 1), 2, 'position']]) # [2, (1, 1), 1, 'position']
+    route = route + [(1,0)]             # add start position
+    route = route[::-1]                 # reverse solution 
 
-# from grid import *
-# grid = np.array(grid_maze)
-# route = astar(grid, (1,0), (2,3), [[2, (1, 1), 1, 'position'], [2, (2, 2), 3, 'position'], [2, (2, 1), 2, 'position']]) # [2, (1, 1), 1, 'position']
-# route = route + [(1,0)]             # add start position
-# route = route[::-1]                 # reverse solution 
+    print(route)
 
-# print(route)
+    from grid import *
+    grid = np.array(grid_maze)
+    route = astar(grid, (1,1), (0,2), [[4, [(1, 1), (0, 1)], 1, 'edge']]) 
+    route = route + [(1,1)]             # add start position
+    route = route[::-1]                 # reverse solution 
 
-# from grid import *
-# grid = np.array(grid_maze)
-# route = astar(grid, (1,1), (0,2), [[4, [(1, 1), (0, 1)], 1, 'edge']]) 
-# route = route + [(1,1)]             # add start position
-# route = route[::-1]                 # reverse solution 
-
-# print(route)
+    print(route)
 
