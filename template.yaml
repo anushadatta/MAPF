@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-test
+
+  Sample SAM Template for sam-test
+
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: python3.9
+    Handler: app.lambda_handler
+    Architectures:
+        - x86_64
+
+
+
+Resources:
+  GETMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/GET/
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: get
+  POSTMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/POST/
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: post
+  PUTMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/PUT/
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: put
+  DELETEMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/DELETE/
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: delete
+  SolverFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: solver/
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /solve
+            Method: post
+  RuntimeStatisticsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: statistics/runtime
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /runtimeStats
+            Method: get
+  ComparisonStatisticsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: statistics/comparison
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /comparisonStats
+            Method: get
+  
+  
