@@ -50,7 +50,6 @@ function getSavedMazes() {
 function getStats() {
     // Get selected maze from drop down 
     var selected_maze = document.getElementById("maze_dropdown").value;
-    console.log(selected_maze);
 
     // TODO: Retrieve statistics from cloud DB
 

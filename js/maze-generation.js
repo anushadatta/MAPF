@@ -112,7 +112,6 @@ const placeAgentStart = (p5, index) => {
 
     let agent_number = document.getElementById("agent_dropdown").value-1;
     let agent_color = agent_colors[agent_number][0]
-    console.log(agentPositions);
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][0]) {
         graph[index[0]][index[1]] = AGENT;
@@ -220,7 +219,6 @@ const visualiseMazeSolution = (p5, mapfSolution) => {
             maxLength = mapfSolution[key].length;
         }
     }
-    console.log(maxLength);
 
     // iterating through longest path
     for (let i = 1; i < maxLength-1; i++) {
@@ -228,7 +226,6 @@ const visualiseMazeSolution = (p5, mapfSolution) => {
             // iterating through agents
             for (let key of Object.keys(mapfSolution)) {
                 if(i<mapfSolution[key].length-1){
-                    console.log(mapfSolution[key][i])
                     colourBox(p5,mapfSolution[key][i],200)
                 }
             }
@@ -266,15 +263,11 @@ const formatMaze = () => {
             }
         }
     }
-    console.log(formattedMaze);
-    console.log(agentPositions);
+    
     return {formattedMaze,agentPositions}
 
 }
 
-const solverApiCall= async()=>{
-
-}
 
 function sketchMainMaze(p5) {
     p5.setup = function () {
@@ -306,7 +299,7 @@ function sketchMainMaze(p5) {
             if(validate()){
                 const apiBody = formatMaze();
                 // make api call
-
+                api("","");
                 visualiseMazeSolution(p5,[]);
             }
             visualise_solution_flag=false;
