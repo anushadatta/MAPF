@@ -42,7 +42,7 @@ function getSavedMazes() {
     label.innerHTML = "Choose saved maze: "
     label.htmlFor = "maze_dropdown";
  
-    document.getElementById("select_maze").appendChild(label).appendChild(select);
+    document.getElementById("select-maze-statistics").appendChild(label).appendChild(select);
 
 }
 

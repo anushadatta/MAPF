@@ -37,7 +37,7 @@
         <div class="content">
 
             <h1 class="title">
-                Multi Agent Path Finding (MAPF!)
+                Multi Agent Path Finding (MAPF)
             </h1>
             <hr class="center">
             <p class="text">
@@ -65,9 +65,6 @@
             <li>
                 <a href="#statistics">STATISTICS</a>
             </li>
-            <li>
-                <a href="#mazes">MAZES</a>
-            </li>
             
             <img src="assets/favicon-grid.png" class="navbar-logo">
 
@@ -89,6 +86,7 @@
                     <p> Introduction to MAPF application.
                         <br> <br>
                         Instructions to use application. 
+                        View, add (user input), edit, and delete saved mazes on cloud DB. 
                     </p>
                     </div>
             </div>
@@ -103,16 +101,13 @@
             <p>Follow the instructions above to run the MAPF simulation below.</p>
 
             <p><b>Maze Generation</b></p>
-            <!-- Maze Generation -->
+
+            <!-- Create new maze -->
             <div style="display:inline">
-                Select Maze Generation Algorithm:
-                <select id="maze-generation-algo">
-                    <option value="rv">Randomised Verticals</option>
-                    <option value="rh">Randomised Horizontals</option>
-                    <option value="rd">Recursive Division</option>
-                </select>
+                Maze Name:
+                <input type="text" id="new_maze_name" name="new_maze_name">
             </div>
-            <button onclick="maze_flag=true" data-inline="true">Go</button>
+            <button onclick="maze_flag=true" data-inline="true">Create New Maze</button>
 
             <br> 
 
@@ -128,23 +123,36 @@
             <button onclick="getStats()" data-inline="true">Go</button>
 
             <br>
+            
+            <!-- Maze Generation -->
+            <div style="display:inline">
+                Select Maze Generation Algorithm:
+                <select id="maze-generation-algo">
+                    <option value="rv">Randomised Verticals</option>
+                    <option value="rh">Randomised Horizontals</option>
+                    <option value="rd">Recursive Division</option>
+                </select>
+            </div>
+            <button onclick="maze_flag=true" data-inline="true">Go</button>
+
+            <br> 
 
             <!-- Edit Maze -->
             <button onClick="onClickFlag='maze';">Toggle obstacle</button>
 
+            <!-- Clear Maze -->
+            <button onClick="">Clear Animation</button>
+            <button onClick="clear_flag=true">Reset Maze</button>
+
             <!-- Save current maze -->
-            <button onClick="">Save Current Maze</button>
+            <button onClick="">Delete Maze</button>
+            <button onClick="">Save Maze</button>
 
             <br>
-
-            <!-- Clear Maze -->
-            <button>Clear Animation</button>
-            <button onClick="clear_flag=true">Reset Maze</button>
 
             <!-- MAPF variables -->
             <p><b>MAPF Variables</b></p>
 
-            
             <div>
                 Select Number of Agents (Max. 15):
                 <input id="numAgents" type="number" min="1" max="15" onchange="updateDropdown()">
@@ -171,7 +179,7 @@
             <div id="main-maze"></div>
 
             <!-- MAPF Solution Cost/Time -->
-            <button>Solve</button>
+            <button onclick="visualise_solution_flag=true;">Solve</button>
 
             <br> 
 
@@ -198,21 +206,11 @@
             <p>View MAPF algorithm execution statistics for saved mazes.</p>
 
             
-            <div id="select_maze" style="display:inline"></div>
+            <div id="select-maze-statistics" style="display:inline"></div>
             <button onclick="getStats()" data-inline="true">Go</button>
             
             
             <canvas id="myChart" style="width:100%" class="center"></canvas>
-        </div>
-
-        <hr class="center">
-    </section>
-
-    <!-- Mazes -->
-    <section id="mazes" class="bg-light">
-        <div class="container">
-            <h1>MAZES</h1>
-            <p>View, add (user input), edit, and delete saved mazes on cloud DB. </p>
         </div>
 
         <hr class="center">

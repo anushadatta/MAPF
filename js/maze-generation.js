@@ -1,12 +1,13 @@
-const EMPTY =0;
-const OBSTACLE=1;
-const AGENT =2;
-const BOUNDARY =3;
+const EMPTY = 0;
+const OBSTACLE = 1;
+const AGENT = 2;
+const BOUNDARY = 3;
 
 
 let graph = [];
 let maze_flag = false;
 let clear_flag = false;
+let visualise_solution_flag = false;
 let onClickFlag = "maze";
 let place = () => { };
 let agentPositions = [];
@@ -21,12 +22,13 @@ const maze_generation_algos = {
     'rv': RandomizedVerticals,
     'rd': RecursiveDivision
 }
+
 // function to initialize the maze and the grid
 function initGrid(p5) {
     const numAgents = document.getElementById("numAgents").value;
-    agentPositions=[];
-    for(let i=0;i<numAgents;i++){
-        agentPositions.push([false,false])
+    agentPositions = [];
+    for (let i = 0; i < numAgents; i++) {
+        agentPositions.push([false, false])
     }
     graph = []
 
@@ -106,35 +108,36 @@ const placeMazeWall = (p5, index) => {
     }
 };
 
-const placeAgentStart=(p5,index)=>{
+const placeAgentStart = (p5, index) => {
 
-    let agent_number = document.getElementById("agent_dropdown").value;
-    let agent_color = agent_colors[agent_number-1][0]
+    let agent_number = document.getElementById("agent_dropdown").value-1;
+    let agent_color = agent_colors[agent_number][0]
+    console.log(agentPositions);
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][0]) {
         graph[index[0]][index[1]] = AGENT;
-        agentPositions[agent_number][0]=index;
+        agentPositions[agent_number][0] = index;
         colourBox(p5, index, agent_color);
-    } else if (graph[index[0]][index[1]] === AGENT && index[0]==agentPositions[agent_number][0][0] &&index[1]==agentPositions[agent_number][0][1]) {
+    } else if (graph[index[0]][index[1]] === AGENT && index[0] == agentPositions[agent_number][0][0] && index[1] == agentPositions[agent_number][0][1]) {
         graph[index[0]][index[1]] = EMPTY;
-        agentPositions[agent_number][0]=false;
+        agentPositions[agent_number][0] = false;
         colourBox(p5, index, 255);
     }
 }
 
-const placeAgentGoal=(p5,index)=>{
+const placeAgentGoal = (p5, index) => {
 
-    let agent_number = document.getElementById("agent_dropdown").value;
-    let agent_color = agent_colors[agent_number-1][1]
+    let agent_number = document.getElementById("agent_dropdown").value-1;
+    let agent_color = agent_colors[agent_number][1]
 
-    if (graph[index[0]][index[1]] === EMPTY&& !agentPositions[agent_number][1]) {
+    if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][1]) {
         graph[index[0]][index[1]] = AGENT;
-        agentPositions[agent_number][1]=index;
+        agentPositions[agent_number][1] = index;
 
         colourBox(p5, index, agent_color);
-    } else if (graph[index[0]][index[1]] === AGENT && index[0]==agentPositions[agent_number][1][0] &&index[1]==agentPositions[agent_number][1][1]) {
+    } else if (graph[index[0]][index[1]] === AGENT && index[0] == agentPositions[agent_number][1][0] && index[1] == agentPositions[agent_number][1][1]) {
         graph[index[0]][index[1]] = EMPTY;
-        agentPositions[agent_number][1]=false;
+        agentPositions[agent_number][1] = false;
         colourBox(p5, index, 255);
     }
 }
@@ -163,7 +166,7 @@ const placeAgentStartOnClick = p5 => {
         index[0] >= 0 &&
         index[1] < mazeWidth &&
         index[1] >= 0
-    ) { 
+    ) {
         placeAgentStart(p5, index);
     }
 
@@ -179,7 +182,7 @@ const placeAgentEndOnClick = p5 => {
         index[0] >= 0 &&
         index[1] < mazeWidth &&
         index[1] >= 0
-    ) { 
+    ) {
         placeAgentGoal(p5, index);
     }
 
@@ -189,11 +192,89 @@ const placeAgentEndOnClick = p5 => {
 // decides on click function based on the global flag
 // the global flag is decided from the buttons
 const onTouchFunctions = {
-    "maze":placeMazeWallOnClick,
-    "agent_start":placeAgentStartOnClick,
-    "agent_end":placeAgentEndOnClick,
+    "maze": placeMazeWallOnClick,
+    "agent_start": placeAgentStartOnClick,
+    "agent_end": placeAgentEndOnClick,
+    
 }
 
+const visualiseMazeSolution = (p5, mapfSolution) => {
+    p5.frameRate(1);
+    mapfSolution = {
+        "1": [
+            [0,1],[0,2],[1,2],
+            [
+                2,
+                10
+            ],
+            [
+                3,
+                10
+            ]
+        ],
+    }
+    let maxLength = 0;
+    // finding agent with longest path
+    for (let key of Object.keys(mapfSolution)) {
+        if(mapfSolution[key].length>maxLength){
+            maxLength = mapfSolution[key].length;
+        }
+    }
+    console.log(maxLength);
+
+    // iterating through longest path
+    for (let i = 1; i < maxLength-1; i++) {
+        setTimeout(() => {
+            // iterating through agents
+            for (let key of Object.keys(mapfSolution)) {
+                if(i<mapfSolution[key].length-1){
+                    console.log(mapfSolution[key][i])
+                    colourBox(p5,mapfSolution[key][i],200)
+                }
+            }
+        }, 0);
+    }
+    p5.frameRate(50);
+}
+
+// making sure that the api call isn't made if input isn't correct
+const validate=()=>{
+    let validatePositions = true;
+    for(let i=0;i<agentPositions.length;i++){
+        for(let j=0;j<2;j++){
+            validatePositions=validatePositions&&agentPositions[i][j];
+        }
+    }
+    if(!validatePositions){
+        alert("Select all start and end positions");
+    }
+    return validatePositions;
+}
+
+const formatMaze = () => {
+    // make a copy of graph
+    let formattedMaze = JSON.parse(JSON.stringify(graph));
+
+    // replace 2/3 with 0/1 respectively
+    for(let i = 0; i < formattedMaze.length; i++) {
+        for(let j = 0; j < formattedMaze[i].length; j++) {
+            if(formattedMaze[i][j]==AGENT) {
+                formattedMaze[i][j]=EMPTY;
+            }
+            else if(formattedMaze[i][j]==BOUNDARY){
+                formattedMaze[i][j]=OBSTACLE;
+            }
+        }
+    }
+    console.log(formattedMaze);
+    console.log(agentPositions);
+    return {formattedMaze,agentPositions}
+
+}
+
+const solverApiCall= async()=>{
+
+}
 
 function sketchMainMaze(p5) {
     p5.setup = function () {
@@ -201,9 +282,9 @@ function sketchMainMaze(p5) {
         p5.background(220);
         initGrid(p5);
     }
-    p5.draw = function () {
+    p5.draw = async function () {
         // stuff to draw
-        place(p5);   
+        place(p5);
         // if the navbar communicates to generate a maze 
         if (clear_flag) {
             clearSketch(p5);
@@ -219,12 +300,24 @@ function sketchMainMaze(p5) {
                 maze_flag = false;
             }
         }
+
+        if(visualise_solution_flag){
+            // checks if all the input is valid
+            if(validate()){
+                const apiBody = formatMaze();
+                // make api call
+
+                visualiseMazeSolution(p5,[]);
+            }
+            visualise_solution_flag=false;
+        }
     }
 
     // p5js inbuilt method to detect screen touches
     p5.touchStarted = () => {
         place = onTouchFunctions[onClickFlag];
     };
+
 }
 
 new p5(sketchMainMaze, 'main-maze')
