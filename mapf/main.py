@@ -98,8 +98,8 @@ def mapf(agents_data, grid_maze):
 
                 break
 
-    for i in goal_node.all_solutions:
-        print(i, ": ", goal_node.all_solutions[i])
+
+    return goal_node.all_solutions
 
 
 if __name__ == "__main__":
@@ -110,4 +110,8 @@ if __name__ == "__main__":
         3: [(0,2), (1,2)],
         4: [(1,1),(0,2)]
     }
-    mapf(agents_data, grid_maze)
+    result = mapf(agents_data, grid_maze)
+
+    for i in result:
+        print(i, ": ", result[i])
+    

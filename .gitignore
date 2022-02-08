@@ -1,3 +1,4 @@
 .aws-sam
 env
 __pycache__
+*.log

@@ -1,41 +1,35 @@
 import json
 # import requests
-
+from main import mapf 
+from grid import grid_maze
+import numpy as np
+from datetime import datetime
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+    # format event for mapf
+    event_body = json.loads(event['body'])
+    
+    agents_data = {}
+    # loop through all agents
+    for i in range(len(event_body['agentPositions'])):
+        data = event_body['agentPositions'][i]
+        agents_data[i+1] = list(map(tuple,data))
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+    grid_maze = event_body['maze']
 
-    context: object, required
-        Lambda Context runtime methods and attributes
+    print(np.array(grid_maze))
+    print(agents_data)
 
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
+    # start = datetime.now()
+    result = mapf(agents_data, grid_maze)
+    # end = datetime.now()
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world",
-            # "location": ip.text.replace("\n", "")
-        }),
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type,Authorization,x-api-key',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        "body": json.dumps(result),
     }

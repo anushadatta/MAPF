@@ -26,6 +26,9 @@ Resources:
           Properties:
             Path: /maze
             Method: get
+            RestApiId:
+              Ref: ApiGateway
+  
   POSTMazeFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -36,6 +39,9 @@ Resources:
           Properties:
             Path: /maze
             Method: post
+            RestApiId:
+              Ref: ApiGateway
+  
   PUTMazeFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -46,6 +52,9 @@ Resources:
           Properties:
             Path: /maze
             Method: put
+            RestApiId:
+              Ref: ApiGateway
+  
   DELETEMazeFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -56,6 +65,9 @@ Resources:
           Properties:
             Path: /maze
             Method: delete
+            RestApiId:
+              Ref: ApiGateway
+  
   SolverFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -66,6 +78,10 @@ Resources:
           Properties:
             Path: /solve
             Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+
   RuntimeStatisticsFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -76,6 +92,8 @@ Resources:
           Properties:
             Path: /runtimeStats
             Method: get
+            RestApiId:
+              Ref: ApiGateway
   ComparisonStatisticsFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -86,5 +104,12 @@ Resources:
           Properties:
             Path: /comparisonStats
             Method: get
+            RestApiId:
+              Ref: ApiGateway
   
-  
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: default
+      Cors: "'*'"
+      Name: MapfGateway
