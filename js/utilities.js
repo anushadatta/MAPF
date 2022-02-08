@@ -15,21 +15,21 @@ const updateDropdown = () => {
 }
 
 // make api call and return value
-const api = async (endpoint, body) => {
-    var myHeaders = new Headers();
+const api = async (method, endpoint, body) => {
+    const BASE_URL = "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
+    const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({ "agentPositions": [[[0, 1], [3, 2]], [[1, 0], [2, 3]], [[0, 2], [1, 2]], [[1, 1], [0, 2]]], "formattedMaze": [[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0], [1, 0, 0, 1]] });
+    const raw = JSON.stringify(body);
 
-    var requestOptions = {
-        method: 'POST',
+    const requestOptions = {
+        method,
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
     };
 
+    const res = await (await fetch(`${BASE_URL}/${endpoint}`, requestOptions)).json();
 
-    const res = await (await fetch("https://hnqvinlkof.execute-api.ap-southeast-1.amazonaws.com/Prod/solve", requestOptions)).json();
-
-    console.log(res);
+   return res;
 }

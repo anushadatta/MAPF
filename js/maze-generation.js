@@ -198,20 +198,7 @@ const onTouchFunctions = {
 }
 
 const visualiseMazeSolution = (p5, mapfSolution) => {
-    p5.frameRate(1);
-    mapfSolution = {
-        "1": [
-            [0,1],[0,2],[1,2],
-            [
-                2,
-                10
-            ],
-            [
-                3,
-                10
-            ]
-        ],
-    }
+    
     let maxLength = 0;
     // finding agent with longest path
     for (let key of Object.keys(mapfSolution)) {
@@ -231,7 +218,7 @@ const visualiseMazeSolution = (p5, mapfSolution) => {
             }
         }, 0);
     }
-    p5.frameRate(50);
+    
 }
 
 // making sure that the api call isn't made if input isn't correct
@@ -248,7 +235,7 @@ const validate=()=>{
     return validatePositions;
 }
 
-const formatMaze = () => {
+const formatApiBody = () => {
     // make a copy of graph
     let formattedMaze = JSON.parse(JSON.stringify(graph));
 
@@ -264,7 +251,7 @@ const formatMaze = () => {
         }
     }
     
-    return {formattedMaze,agentPositions}
+    return {maze:formattedMaze,agentPositions}
 
 }
 
@@ -297,10 +284,11 @@ function sketchMainMaze(p5) {
         if(visualise_solution_flag){
             // checks if all the input is valid
             if(validate()){
-                const apiBody = formatMaze();
+                const apiBody = formatApiBody();
                 // make api call
-                api("","");
-                visualiseMazeSolution(p5,[]);
+                const mazeSolution = await api("POST","solve",apiBody);
+                console.log(mazeSolution);
+                visualiseMazeSolution(p5,mazeSolution);
             }
             visualise_solution_flag=false;
         }
