@@ -12,20 +12,30 @@ import os
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
 
-    TABLE_NAME = os.environ.get("TABLE")
-    table = dynamodb.Table(TABLE_NAME)
+    MAZE_TABLE = os.environ.get("MAZE_TABLE")
+    STATS_TABLE = os.environ.get("STATS_TABLE")
+
+    maze_table = dynamodb.Table(MAZE_TABLE)
+    stats_table = dynamodb.Table(STATS_TABLE)
 
     user_id = 'x'
     response = None
     status_code = 200
 
     try:
-        response = table.scan(FilterExpression=Attr('user_id').eq(user_id))["Items"]
-        for ele in response:
+        maze_response = maze_table.scan(FilterExpression=Attr('user_id').eq(user_id))["Items"]
+        
+        stats_response = stats_table.scan(FilterExpression=Attr('user_id').eq(user_id))["Items"]
+        for ele in stats_response:
             for key in ele:
                 print(type(ele[key]))
                 if type(ele[key])!=str:
                     ele[key]=int(ele[key])
+        response = {
+            "mazes":maze_response,
+            "statistics":stats_response
+        }
+        
     except ClientError as e:
         response = e.response['Error']['Message']
         status_code = 400

@@ -134,6 +134,27 @@ Resources:
             RestApiId:
               Ref: ApiGateway
 
+  UserMapfDataFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: user_mapf_data/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          MAZE_TABLE: !Ref MazeTable
+          STATS_TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /user_mapf_data
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
 
   ApiGateway:
     Type: AWS::Serverless::Api
