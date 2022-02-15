@@ -5,12 +5,11 @@ from grid import grid_maze
 import numpy as np
 from datetime import datetime
 import boto3
+from botocore.exceptions import ClientError
 import os
 import uuid
 
 def POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp):
-
-    status_code = 200
 
     try:
         dynamodb = boto3.resource('dynamodb')
@@ -20,22 +19,27 @@ def POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_co
         run_id = str(uuid.uuid4())
         user_id = 'x'
 
-        response = table.put_item(
+        table.put_item(
         Item={
                 'run_id': run_id,
                 'maze_id': maze_id,
                 'user_id': user_id,
-                'execution_cost':execution_cost,
-                'execution_time':execution_time,
+                'execution_cost': execution_cost,
+                'execution_time': str(execution_time),
                 'agents_count': agents_count,
                 'lower_level_solver': lower_level_solver,
-                'run_timestamp': timestamp
+                'run_timestamp': str(timestamp)
             }
         )
-    except:
+
+        response = "Success"
+        status_code = 200
+
+    except ClientError as e:
+        response = e.response['Error']['Message']
         status_code = 400
 
-    return status_code
+    return response, status_code
 
 
 def lambda_handler(event, context):
@@ -79,8 +83,11 @@ def lambda_handler(event, context):
     lower_level_solver = event_body['lower_level_solver']
     timestamp= start
 
-    status_code = POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp)
+    response, status_code = POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp)
 
+    if status_code==400:
+        response_body = response
+    
     return {
         "statusCode": status_code,
         'headers': {
