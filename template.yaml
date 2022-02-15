@@ -20,6 +20,12 @@ Resources:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: maze/GET/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
       Events:
         ApiEvent:
           Type: Api 
@@ -28,11 +34,18 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   
   POSTMazeFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: maze/POST/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
       Events:
         ApiEvent:
           Type: Api 
@@ -41,11 +54,18 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   
   PUTMazeFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: maze/PUT/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
       Events:
         ApiEvent:
           Type: Api 
@@ -59,6 +79,12 @@ Resources:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: maze/DELETE/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
       Events:
         ApiEvent:
           Type: Api 
@@ -67,11 +93,19 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
-  
+
+
+
   SolverFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: mapf/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
       Events:
         ApiEvent:
           Type: Api 
@@ -80,12 +114,16 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
-
-
   RuntimeStatisticsFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: statistics/runtime
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
       Events:
         ApiEvent:
           Type: Api 
@@ -98,6 +136,12 @@ Resources:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: statistics/comparison
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
       Events:
         ApiEvent:
           Type: Api 
@@ -107,9 +151,27 @@ Resources:
             RestApiId:
               Ref: ApiGateway
   
+
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       StageName: default
       Cors: "'*'"
       Name: MapfGateway
+
+  MazeTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: MazeTable
+    Properties:
+      PrimaryKey:
+        Name: maze_id
+        Type: String
+
+  RunStatisticsTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: StatisticsTable
+    Properties:
+      PrimaryKey:
+        Name: run_id
+        Type: String

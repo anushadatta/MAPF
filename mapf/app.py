@@ -21,9 +21,20 @@ def lambda_handler(event, context):
     print(np.array(grid_maze))
     print(agents_data)
 
-    # start = datetime.now()
-    result = mapf(agents_data, grid_maze)
-    # end = datetime.now()
+    start = datetime.now()
+    maze_solution = mapf(agents_data, grid_maze)
+    end = datetime.now()
+    time = (end-start).total_seconds()
+    cost =0
+    for key in maze_solution:
+        cost+=len(maze_solution[key])-1
+
+    response_body = {
+        "time":time,
+        "cost":cost,
+        "mazeSolution":maze_solution
+    }
+
     return {
         "statusCode": 200,
         'headers': {
@@ -31,5 +42,5 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
-        "body": json.dumps(result),
+        "body": json.dumps(response_body),
     }
