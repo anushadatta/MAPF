@@ -114,43 +114,25 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
-  RuntimeStatisticsFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: statistics/runtime
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref RunStatisticsTable
-      Environment:
-        Variables:
-          TABLE: !Ref RunStatisticsTable
-      Events:
-        ApiEvent:
-          Type: Api 
-          Properties:
-            Path: /runtimeStats
-            Method: get
-            RestApiId:
-              Ref: ApiGateway
-  ComparisonStatisticsFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: statistics/comparison
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref RunStatisticsTable
-      Environment:
-        Variables:
-          TABLE: !Ref RunStatisticsTable
-      Events:
-        ApiEvent:
-          Type: Api 
-          Properties:
-            Path: /comparisonStats
-            Method: get
-            RestApiId:
-              Ref: ApiGateway
   
+  StatisticsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: statistics/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /stats
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
 
 
   ApiGateway:
