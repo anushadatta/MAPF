@@ -2,41 +2,40 @@ import json
 
 # import requests
 
+from decimal import Decimal
+import boto3
+from botocore.exceptions import ClientError
+import os
+
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+    dynamodb = boto3.resource('dynamodb')
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+    TABLE_NAME = os.environ.get("TABLE")
+    table = dynamodb.Table(TABLE_NAME)
 
-    context: object, required
-        Lambda Context runtime methods and attributes
-
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
+    event_body = json.loads(event['body'])
+    maze_id = event_body['maze_id']
+    
+    status_code = 200
+    
+    try:
+        response = table.delete_item(
+            Key={
+                'maze_id':maze_id
+            },
+        )
+    except ClientError as e:
+        response = e.response['Error']['Message']
+        status_code = 400
 
     return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world",
-            # "location": ip.text.replace("\n", "")
-        }),
+        "statusCode": status_code,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type,Authorization,x-api-key',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        "body": json.dumps(response),
     }
