@@ -1,5 +1,6 @@
 const updateDropdown = () => {
     // TODO: when this happens reset the maze
+    clear_flag = true;
     const numAgents = document.getElementById("numAgents").value;
 
     const dropdownNode = document.getElementById("agent_dropdown");

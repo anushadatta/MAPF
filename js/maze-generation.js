@@ -197,7 +197,13 @@ const onTouchFunctions = {
     
 }
 
-const visualiseMazeSolution = (p5, mapfSolution) => {
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+  
+
+
+const visualiseMazeSolution = async (p5, mapfSolution) => {
     
     let maxLength = 0;
     // finding agent with longest path
@@ -209,14 +215,15 @@ const visualiseMazeSolution = (p5, mapfSolution) => {
 
     // iterating through longest path
     for (let i = 1; i < maxLength-1; i++) {
-        setTimeout(() => {
+        // setTimeout(() => {
             // iterating through agents
             for (let key of Object.keys(mapfSolution)) {
                 if(i<mapfSolution[key].length-1){
-                    colourBox(p5,mapfSolution[key][i],200)
+                    colourBox(p5,mapfSolution[key][i], agent_colors[key-1][0]);
                 }
             }
-        }, 0);
+        // }, 0);
+        await delay(500);
     }
     
 }
@@ -251,7 +258,7 @@ const formatApiBody = () => {
         }
     }
     
-    return {maze:formattedMaze,agentPositions}
+    return {maze:formattedMaze,agent_positions:agentPositions}
 
 }
 
@@ -282,15 +289,17 @@ function sketchMainMaze(p5) {
         }
 
         if(visualise_solution_flag){
+            visualise_solution_flag=false;
             // checks if all the input is valid
             if(validate()){
                 const apiBody = formatApiBody();
                 // make api call
-                const mazeSolution = await api("POST","solve",apiBody);
+                const {mazeSolution,time,cost} = await api("POST","solve",apiBody);
                 console.log(mazeSolution);
-                visualiseMazeSolution(p5,mazeSolution);
+                document.getElementById("execution-time").innerHTML=time;
+                document.getElementById("execution-cost").innerHTML=cost;
+                await visualiseMazeSolution(p5,mazeSolution);
             }
-            visualise_solution_flag=false;
         }
     }
 
