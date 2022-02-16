@@ -15,7 +15,6 @@
     <script src="js/colors.js" defer></script>
     <script src="js/statistics.js" defer></script>
     <script src="js/maze-generation.js" defer></script>
-    <script src="js/maze-visualization.js" defer></script>
     <script src="js/mazeGenerationAlgos/RandomizedHorizontals.js"></script>
     <script src="js/mazeGenerationAlgos/RandomizedVerticals.js"></script>
     <script src="js/mazeGenerationAlgos/RecursiveDivision.js"></script>
@@ -30,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body onload="getSavedMazes()">
+<body onload="getUserMapfData()">
 
     <!-- Landing page -->
     <header id="home" class="showcase">
@@ -112,6 +111,7 @@
             <br> 
 
             <!-- Load Saved Mazes -->
+            <!-- TODO: GET mazes from DB API -->
             <div style="display:inline">
                 Load Saved Maze:
                 <select>
@@ -222,7 +222,7 @@
 
             <h2>Get in Touch</h2>
             <p>Please feel free to reach out for any questions, feedback or collaboration!</p>
-
+            <div style="display:none;">ABHINAV WAS HERE</div>
             <a href="mailto:anushadatta@gmail.com"><i class="fa fa-envelope"></i></a>
 
             <a href="https://www.linkedin.com/in/anusha-datta/" target="_blank"><i class="fa fa-linkedin"></i></a>

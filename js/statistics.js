@@ -21,9 +21,13 @@ var time = [
 ];
 
 // Generate drop down for all saved mazes 
-function getSavedMazes() {
+function getSavedMazes(data) {
     // TODO: Retrieve list of mazes from cloud DB
-    var values = ['Maze 1', 'Maze 2', 'Maze 3', 'Maze 4']
+    // get maze names from AWS Maze DB
+    var values = []
+    for (const maze_record in data) {
+        values.push(maze_record["maze_name"])
+    }
  
     // Create drop down menu for saved mazes retrieved above
     var select = document.createElement("select");
