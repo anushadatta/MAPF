@@ -110,7 +110,7 @@ const placeMazeWall = (p5, index) => {
 
 const placeAgentStart = (p5, index) => {
 
-    let agent_number = document.getElementById("agent_dropdown").value-1;
+    let agent_number = document.getElementById("agent_dropdown").value - 1;
     let agent_color = agent_colors[agent_number][0]
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][0]) {
@@ -126,7 +126,7 @@ const placeAgentStart = (p5, index) => {
 
 const placeAgentGoal = (p5, index) => {
 
-    let agent_number = document.getElementById("agent_dropdown").value-1;
+    let agent_number = document.getElementById("agent_dropdown").value - 1;
     let agent_color = agent_colors[agent_number][1]
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][1]) {
@@ -194,49 +194,49 @@ const onTouchFunctions = {
     "maze": placeMazeWallOnClick,
     "agent_start": placeAgentStartOnClick,
     "agent_end": placeAgentEndOnClick,
-    
+
 }
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
-  }
-  
+}
+
 
 
 const visualiseMazeSolution = async (p5, mapfSolution) => {
-    
+
     let maxLength = 0;
     // finding agent with longest path
     for (let key of Object.keys(mapfSolution)) {
-        if(mapfSolution[key].length>maxLength){
+        if (mapfSolution[key].length > maxLength) {
             maxLength = mapfSolution[key].length;
         }
     }
 
     // iterating through longest path
-    for (let i = 1; i < maxLength-1; i++) {
+    for (let i = 1; i < maxLength - 1; i++) {
         // setTimeout(() => {
-            // iterating through agents
-            for (let key of Object.keys(mapfSolution)) {
-                if(i<mapfSolution[key].length-1){
-                    colourBox(p5,mapfSolution[key][i], agent_colors[key-1][0]);
-                }
+        // iterating through agents
+        for (let key of Object.keys(mapfSolution)) {
+            if (i < mapfSolution[key].length - 1) {
+                colourBox(p5, mapfSolution[key][i], agent_colors[key - 1][0]);
             }
+        }
         // }, 0);
         await delay(500);
     }
-    
+
 }
 
 // making sure that the api call isn't made if input isn't correct
-const validate=()=>{
+const validate = () => {
     let validatePositions = true;
-    for(let i=0;i<agentPositions.length;i++){
-        for(let j=0;j<2;j++){
-            validatePositions=validatePositions&&agentPositions[i][j];
+    for (let i = 0; i < agentPositions.length; i++) {
+        for (let j = 0; j < 2; j++) {
+            validatePositions = validatePositions && agentPositions[i][j];
         }
     }
-    if(!validatePositions){
+    if (!validatePositions) {
         alert("Select all start and end positions");
     }
     return validatePositions;
@@ -247,18 +247,18 @@ const formatApiBody = () => {
     let formattedMaze = JSON.parse(JSON.stringify(graph));
 
     // replace 2/3 with 0/1 respectively
-    for(let i = 0; i < formattedMaze.length; i++) {
-        for(let j = 0; j < formattedMaze[i].length; j++) {
-            if(formattedMaze[i][j]==AGENT) {
-                formattedMaze[i][j]=EMPTY;
+    for (let i = 0; i < formattedMaze.length; i++) {
+        for (let j = 0; j < formattedMaze[i].length; j++) {
+            if (formattedMaze[i][j] == AGENT) {
+                formattedMaze[i][j] = EMPTY;
             }
-            else if(formattedMaze[i][j]==BOUNDARY){
-                formattedMaze[i][j]=OBSTACLE;
+            else if (formattedMaze[i][j] == BOUNDARY) {
+                formattedMaze[i][j] = OBSTACLE;
             }
         }
     }
-    
-    return {maze:formattedMaze,agent_positions:agentPositions}
+
+    return { maze: formattedMaze, agent_positions: agentPositions }
 
 }
 
@@ -288,17 +288,28 @@ function sketchMainMaze(p5) {
             }
         }
 
-        if(visualise_solution_flag){
-            visualise_solution_flag=false;
+        if (visualise_solution_flag) {
+            visualise_solution_flag = false;
             // checks if all the input is valid
-            if(validate()){
+            if (validate()) {
                 const apiBody = formatApiBody();
                 // make api call
-                const {mazeSolution,time,cost} = await api("POST","solve",apiBody);
+                // var myHeaders = new Headers();
+                // myHeaders.append("Content-Type", "application/json");
+
+                // var requestOptions = {
+                //     method: 'POST',
+                //     headers: myHeaders,
+                //     body: JSON.stringify(apiBody),
+
+                // };
+                // fetch("https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage/solve", requestOptions).then(response => response.json()).then(console.log).catch(error => console.log('error', error));
+
+                const { mazeSolution, time, cost } = await api("POST", "solve", apiBody);
                 console.log(mazeSolution);
-                document.getElementById("execution-time").innerHTML=time;
-                document.getElementById("execution-cost").innerHTML=cost;
-                await visualiseMazeSolution(p5,mazeSolution);
+                document.getElementById("execution-time").innerHTML = time;
+                document.getElementById("execution-cost").innerHTML = cost;
+                await visualiseMazeSolution(p5, mazeSolution);
             }
         }
     }

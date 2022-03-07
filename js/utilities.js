@@ -3,8 +3,12 @@
 const updateDropdown = () => {
     
     clear_flag = true;
-    const numAgents = document.getElementById("numAgents").value;
-
+    let numAgents = document.getElementById("numAgents").value;
+    
+    if(numAgents>15){
+        document.getElementById("numAgents").value=15;
+        numAgents=15;
+    }
     const dropdownNode = document.getElementById("agent_dropdown");
     dropdownNode.innerHTML = "";
     agentPositions = [];
@@ -18,39 +22,56 @@ const updateDropdown = () => {
 }
 
 // get user mapf data upon loading of app
-const getUserMapfData = () => {
-    // TODO: get the user token to query data 
-    const {mazes:mazesAwsData,statistics:statsAwsData} = api("GET", "user_mapf_data", {});
-
+const getUserMapfData = async () => {
+    // TODO: get the user token to query data
+    const { mazes: mazesAwsData, statistics: statsAwsData } = await api(
+      "GET",
+      "user_mapf_data",
+      {}
+    );
+    // console.log(mazesAwsData, statsAwsData);
     // update mazes dropdown
-    getSavedMazes(mazesAwsData);
-
-    // update stats dropdown 
-    
-
-}
-
-// make api call and return value
-const api = async (method, endpoint, body) => {
-    const BASE_URL = "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
+    //   getSavedMazes(mazesAwsData);
+  
+    // update stats dropdown
+  };
+  
+  // make api call and return value
+  const api = async (method, endpoint, body) => {
+    const BASE_URL =
+      "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    // TODO: add parameter
-    // myHeaders.append("Authorisation", "Bearer Token");
-
     const raw = JSON.stringify(body);
-
+  
     let requestOptions = {
-        method,
-        headers: myHeaders,
-        // body: raw,
-        redirect: 'follow'
+      method,
+      redirect: "follow",
     };
-    if(method!="GET"){
-        requestOptions[body] =raw;
+    if (method != "GET") {
+        console.log(raw)
+      requestOptions["body"] = raw;
+      requestOptions["headers"] = myHeaders;
     }
-
-    const res = await (await fetch(`${BASE_URL}/${endpoint}`, requestOptions)).json();
-
-   return res;
-}
+  
+    const res = await (
+      await fetch(`${BASE_URL}/${endpoint}`, requestOptions)
+    ).json();
+  
+    return res;
+  };
+  
+  // api("GET", "/maze").then(console.log);
+  //
+  // var requestOptions = {
+  //   method: "GET",
+  //   redirect: "follow",
+  // };
+  
+  // fetch(
+  //   "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage/maze",
+  //   requestOptions
+  // )
+  //   .then((response) => response.text())
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.log("error", error));
