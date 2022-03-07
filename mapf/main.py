@@ -50,7 +50,7 @@ def mapf(agents_data, grid_maze):
             break
 
         # update current node
-        current_node = ct_update_current_node(leaf_nodes)
+        current_node = get_optimal_node(leaf_nodes)
 
         # find conflicts
         for combination in agent_combinations:

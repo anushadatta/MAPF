@@ -1,38 +1,38 @@
 from astar import *
 
 def computeConflicts(agent1, agent2, path1, path2):
+
+    conflicts = []
+    min_length = min(len(path1), len(path2)) - 1
+
+    # check conflicts at each time stamp
+    for timestamp in range(0, min_length):
         
-        conflicts = []
-        min_length = min(len(path1), len(path2)) - 1
-
-        # check conflicts at each time stamp
-        for timestamp in range(0, min_length):
-            
-            position1 = path1[timestamp]
-            position2 = path2[timestamp]
-            
-            # conflict found
-            if position1 == position2:
-                conflicts.append([agent1, position1, timestamp, 'position'])
-                conflicts.append([agent2, position1, timestamp, 'position'])
-
-                return conflicts
+        position1 = path1[timestamp]
+        position2 = path2[timestamp]
         
-        # compute edge conflicts (a-b-c-d, g-e-d-c-x: conflict at c-d/d-c)
-        for timestamp in range(0, min_length-1):
-            agent1_position1 = path1[timestamp]         # c
-            agent1_position2 = path1[timestamp+1]       # d
+        # conflict found
+        if position1 == position2:
+            conflicts.append([agent1, position1, timestamp, 'position'])
+            conflicts.append([agent2, position1, timestamp, 'position'])
 
-            agent2_position1 = path2[timestamp]         # d
-            agent2_position2 = path2[timestamp+1]       # c
+            return conflicts
+    
+    # compute edge conflicts (a-b-c-d, g-e-d-c-x: conflict at c-d/d-c)
+    for timestamp in range(0, min_length-1):
+        agent1_position1 = path1[timestamp]         # c
+        agent1_position2 = path1[timestamp+1]       # d
 
-            # edge conflict found
-            if (agent1_position1 == agent2_position2) and (agent1_position2 == agent2_position1):
-                conflicts.append([agent1, [agent1_position1, agent1_position2], timestamp+1, 'edge'])
-                conflicts.append([agent2, [agent1_position2, agent2_position2], timestamp+1, 'edge'])
-                return conflicts
+        agent2_position1 = path2[timestamp]         # d
+        agent2_position2 = path2[timestamp+1]       # c
 
-        return conflicts # = []
+        # edge conflict found
+        if (agent1_position1 == agent2_position2) and (agent1_position2 == agent2_position1):
+            conflicts.append([agent1, [agent1_position1, agent1_position2], timestamp+1, 'edge'])
+            conflicts.append([agent2, [agent1_position2, agent2_position2], timestamp+1, 'edge'])
+            return conflicts
+
+    return conflicts # = []
 
 def find_leaf_nodes(root_node):
     
@@ -79,24 +79,14 @@ def ct_goal_node(leaf_nodes, agent_combinations):
     if goal_nodes == []:
         return None
     else:
-        # order nodes by cost 
-        goal_nodes.sort(key=lambda x: x.total_cost)
+        goal_node = get_optimal_node(goal_nodes)
 
-        # break ties with CAT (conflict avoidance table)
-        least_cost = goal_nodes[0].total_cost 
-        goal_nodes_least_cost = []
+        return goal_node
 
-        for node in goal_nodes:
-            if node.total_cost == least_cost:
-                goal_nodes_least_cost.append(node)
-        
-        goal_nodes_least_cost.sort(key=lambda x: len(x.conflicts))
-
-        return goal_nodes_least_cost[0]
-
-def ct_update_current_node(leaf_nodes):
+def get_optimal_node(leaf_nodes):
     
     leaf_nodes.sort(key=lambda x: x.total_cost)
+
     # break ties with CAT (conflict avoidance table)
     least_cost = leaf_nodes[0].total_cost 
     leaf_nodes_least_cost = []

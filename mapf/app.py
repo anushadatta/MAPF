@@ -75,12 +75,14 @@ def lambda_handler(event, context):
         "mazeSolution":maze_solution
     }
 
-    maze_id = event_body['maze_id']
+    maze_id = event_body.get('maze_id','NA')
     user_id = 'x'
     execution_cost= cost
     execution_time = time
     agents_count = agents
-    lower_level_solver = event_body['lower_level_solver']
+    lower_level_solver = event_body.get('lower_level_solver','NA')
+    # TODO: write all possible string values
+    LOWER_LEVEL_SOlVER = {}
     timestamp= start
 
     response, status_code = POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp)
