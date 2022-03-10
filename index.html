@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body onload="getUserMapfData()">
+<body onload="getUserMapfData(); updateDropdown()">
 
     <!-- Landing page -->
     <header id="home" class="showcase">
@@ -108,10 +108,10 @@
                 </div>
 
                 <div class="vertical-center">
-                    <input type="text" id="new_maze_name" name="new_maze_name" style="width:100%;">
+                    <input type="text" id="new_maze_name" name="new_maze_name" placeholder="Type name here...">
                 </div>
 
-                <div class="center">
+                <div style="text-align: right;" class="vertical-center">
                     <button onclick="maze_flag=true" data-inline="true" class="button" style="width:130px">Create New
                         Maze</button>
                 </div>
@@ -126,14 +126,13 @@
                     Load all Saved Mazes:
                 </div>
                 <div class="vertical-center">
-                    <select style="width:100%">
+                    <select>
                         <option>Maze 1</option>
                         <option>Maze 2</option>
                         <option>Maze 3</option>
                     </select>
-
                 </div>
-                <div class="center">
+                <div style="text-align: right;" class="vertical-center">
                     <button onclick="getStats()" data-inline="true" style="width:130px">Go</button>
                 </div>
             </div>
@@ -147,13 +146,13 @@
                 </div>
 
                 <div class="vertical-center">
-                    <select id="maze-generation-algo" style="width:100%">
+                    <select id="maze-generation-algo">
                         <option value="rv">Randomised Verticals</option>
                         <option value="rh">Randomised Horizontals</option>
                         <option value="rd">Recursive Division</option>
                     </select>
                 </div>
-                <div class="center">
+                <div style="text-align: right;" class="vertical-center">
                     <button onclick="maze_flag=true" style="width:130px">Generate Maze</button>
                 </div>
             </div>
@@ -170,7 +169,7 @@
                     obstacle</button>
 
                 <!-- Clear Maze -->
-                <button onClick="">Clear Animation</button>
+                <button onClick="animated=true;">Clear Animation</button>
                 <button onClick="clear_flag=true">Reset Maze</button>
 
                 <!-- Save current maze -->
@@ -182,34 +181,49 @@
             <!-- MAPF variables -->
             <p><b>MAPF Variables</b></p>
 
-            <div>
-                Select Number of Agents (Max. 15):
-                <input id="numAgents" type="number" min="1" max="15" onchange="updateDropdown()">
+            <div class="grid-2 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Number of Agents (Max. 15):
+                </div>
+                <div>
+                    <input id="numAgents" type="number" min="1" max="15" value="1" onchange="updateDropdown()">
+                </div>
             </div>
 
-            <div>
-                Select A* Search Heuristic:
-                <select>
-                    <option>Manhattan Distance</option>
-                    <option>Chebyshev Distance</option>
-                    <option>Euclidian Distance</option>
-                </select>
+            <div class="grid-2 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    A* Search Heuristic:
+                </div>
+                <div>
+                    <select id="a_star_heuristic">
+                        <option value="manhattan_heuristic">Manhattan Distance</option>
+                        <option value="chebyshev_heuristic">Chebyshev Distance</option>
+                        <option value="euclidian_heuristic">Euclidian Distance</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Place Agent -->
-            <div style="display:inline">
-                Select Agent to place on Maze:
-                <select id="agent_dropdown">
-                </select>
+            <div class="grid-2 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Agent to place on Maze:
+                </div>
+                <div>
+                    <select id="agent_dropdown">
+                    </select>
+                </div>
             </div>
 
-            <button
-                onclick="onClickFlag='agent_start'; button_selection_css('select_start_button', ['select_goal_button','toggle_obstacle_button'])"
-                id="select_start_button" class="">Select Start
-                Position</button>
-            <button
-                onclick="onClickFlag='agent_end'; button_selection_css('select_goal_button', ['select_start_button','toggle_obstacle_button'])"
-                id="select_goal_button" class="">Select Goal Position</button>
+            <div class="center">
+                <button
+                    onclick="onClickFlag='agent_start'; button_selection_css('select_start_button', ['select_goal_button','toggle_obstacle_button'])"
+                    id="select_start_button" class="">Select Start
+                    Position</button>
+                <button
+                    onclick="onClickFlag='agent_end'; button_selection_css('select_goal_button', ['select_start_button','toggle_obstacle_button'])"
+                    id="select_goal_button" class="">Select Goal Position</button>
+
+            </div>
 
             <!-- MAZE!!! -->
             <div id="main-maze"></div>

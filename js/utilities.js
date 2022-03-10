@@ -2,13 +2,20 @@
 // MAPF variables "Select Number of Agents (Max. 15):" dropdown
 const updateDropdown = () => {
     
+    // clear maze every time number of agents updated by user
     clear_flag = true;
-    let numAgents = document.getElementById("numAgents").value;
     
+    // only allow integer inputs in dropdown
+    let numAgents = parseInt(document.getElementById("numAgents").value);
+    document.getElementById("numAgents").value=numAgents;
+
+    // limit number of agents to 15
     if(numAgents>15){
         document.getElementById("numAgents").value=15;
         numAgents=15;
     }
+    
+    // populate agent dropdown based on count entered by user
     const dropdownNode = document.getElementById("agent_dropdown");
     dropdownNode.innerHTML = "";
     agentPositions = [];

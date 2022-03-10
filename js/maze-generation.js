@@ -8,6 +8,7 @@ let graph = [];
 let maze_flag = false;
 let clear_flag = false;
 let visualise_solution_flag = false;
+let animated = false
 let onClickFlag = "maze";
 let place = () => { };
 let agentPositions = [];
@@ -144,8 +145,6 @@ const placeAgentGoal = (p5, index) => {
 // function to place maze wall on click
 const placeMazeWallOnClick = p5 => {
 
-
-
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -159,6 +158,7 @@ const placeMazeWallOnClick = p5 => {
 
     place = () => { };
 };
+
 // place agent on Click
 const placeAgentStartOnClick = p5 => {
 
@@ -197,20 +197,32 @@ const placeAgentEndOnClick = p5 => {
     place = () => { };
 };
 
+
+const clearAnimation = p5 => {
+    for (let i = 0; i < graph.length; i++) {
+        for (let j = 0; j < graph[0].length; j++) {
+            if (graph[i][j] === 0) {
+                colourBox(p5, [i, j], 255);
+            }
+            if (graph[i][j] === 5) {
+                colourBox(p5, [i, j], [255, 0, 255]);
+            }
+        }
+    }
+    animated = false;
+};
+
 // decides on click function based on the global flag
 // the global flag is decided from the buttons
 const onTouchFunctions = {
     "maze": placeMazeWallOnClick,
     "agent_start": placeAgentStartOnClick,
     "agent_end": placeAgentEndOnClick,
-
 }
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
-
-
 
 const visualiseMazeSolution = async (p5, mapfSolution) => {
 
@@ -252,6 +264,10 @@ const validate = () => {
 }
 
 const formatApiBody = () => {
+
+    // get selected A* heuristic
+    const heuristic = document.getElementById("a_star_heuristic").value;
+
     // make a copy of graph
     let formattedMaze = JSON.parse(JSON.stringify(graph));
 
@@ -267,7 +283,7 @@ const formatApiBody = () => {
         }
     }
 
-    return { maze: formattedMaze, agent_positions: agentPositions }
+    return { maze: formattedMaze, agent_positions: agentPositions, heuristic }
 
 }
 
@@ -281,10 +297,18 @@ function sketchMainMaze(p5) {
     p5.draw = async function () {
         // stuff to draw
         place(p5);
+
         // if the navbar communicates to generate a maze 
+        // Reset Maze
         if (clear_flag) {
-            clearSketch(p5);
             clear_flag = false;
+            clearSketch(p5);
+        }
+
+        // Clear Animation
+        if (animated) {
+            animated = false;
+            clearAnimation(p5);
         }
 
         if (maze_flag) {
