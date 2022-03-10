@@ -64,7 +64,7 @@
             <li>
                 <a href="#statistics">STATISTICS</a>
             </li>
-            
+
             <img src="assets/favicon-grid.png" class="navbar-logo">
 
         </ul>
@@ -84,10 +84,10 @@
                     <h3>Conflict Based Search for Optimal MAPF</h3>
                     <p> Introduction to MAPF application.
                         <br> <br>
-                        Instructions to use application. 
-                        View, add (user input), edit, and delete saved mazes on cloud DB. 
+                        Instructions to use application.
+                        View, add (user input), edit, and delete saved mazes on cloud DB.
                     </p>
-                    </div>
+                </div>
             </div>
         </div>
         <hr class="center">
@@ -102,52 +102,81 @@
             <p><b>Maze Generation</b></p>
 
             <!-- Create new maze -->
-            <div style="display:inline">
-                Maze Name:
-                <input type="text" id="new_maze_name" name="new_maze_name">
-            </div>
-            <button onclick="maze_flag=true" data-inline="true">Create New Maze</button>
+            <div class="grid-3 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Maze Name:
+                </div>
 
-            <br> 
+                <div class="vertical-center">
+                    <input type="text" id="new_maze_name" name="new_maze_name" style="width:100%;">
+                </div>
+
+                <div class="center">
+                    <button onclick="maze_flag=true" data-inline="true" class="button" style="width:130px">Create New
+                        Maze</button>
+                </div>
+            </div>
+
+            <br>
 
             <!-- Load Saved Mazes -->
             <!-- TODO: GET mazes from DB API -->
-            <div style="display:inline">
-                Load Saved Maze:
-                <select>
-                    <option>Maze 1</option>
-                    <option>Maze 2</option>
-                    <option>Maze 3</option>
-                </select>
+            <div class="grid-3 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Load all Saved Mazes:
+                </div>
+                <div class="vertical-center">
+                    <select style="width:100%">
+                        <option>Maze 1</option>
+                        <option>Maze 2</option>
+                        <option>Maze 3</option>
+                    </select>
+
+                </div>
+                <div class="center">
+                    <button onclick="getStats()" data-inline="true" style="width:130px">Go</button>
+                </div>
             </div>
-            <button onclick="getStats()" data-inline="true">Go</button>
 
             <br>
-            
+
             <!-- Maze Generation -->
-            <div style="display:inline">
-                Select Maze Generation Algorithm:
-                <select id="maze-generation-algo">
-                    <option value="rv">Randomised Verticals</option>
-                    <option value="rh">Randomised Horizontals</option>
-                    <option value="rd">Recursive Division</option>
-                </select>
+            <div class="grid-3 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Maze Generation Algorithm:
+                </div>
+
+                <div class="vertical-center">
+                    <select id="maze-generation-algo" style="width:100%">
+                        <option value="rv">Randomised Verticals</option>
+                        <option value="rh">Randomised Horizontals</option>
+                        <option value="rd">Recursive Division</option>
+                    </select>
+                </div>
+                <div class="center">
+                    <button onclick="maze_flag=true" style="width:130px">Generate Maze</button>
+                </div>
             </div>
-            <button onclick="maze_flag=true" data-inline="true">Go</button>
 
-            <br> 
+            <br>
 
-            <!-- Edit Maze -->
-            <button onClick="onClickFlag='maze';">Toggle obstacle</button>
+            <div class="center">
 
-            <!-- Clear Maze -->
-            <button onClick="">Clear Animation</button>
-            <button onClick="clear_flag=true">Reset Maze</button>
 
-            <!-- Save current maze -->
-            <button onClick="">Delete Maze</button>
-            <button onClick="">Save Maze</button>
+                <!-- Edit Maze -->
+                <button
+                    onClick="onClickFlag='maze'; button_selection_css('toggle_obstacle_button', ['select_goal_button','select_start_button'])"
+                    id="toggle_obstacle_button" class="button-clicked">Toggle
+                    obstacle</button>
 
+                <!-- Clear Maze -->
+                <button onClick="">Clear Animation</button>
+                <button onClick="clear_flag=true">Reset Maze</button>
+
+                <!-- Save current maze -->
+                <button onClick="">Update Maze</button>
+                <button onClick="">Delete Maze</button>
+            </div>
             <br>
 
             <!-- MAPF variables -->
@@ -159,9 +188,11 @@
             </div>
 
             <div>
-                Select Low Level Path Solver:
+                Select A* Search Heuristic:
                 <select>
-                    <option>A* Search</option>
+                    <option>Manhattan Distance</option>
+                    <option>Chebyshev Distance</option>
+                    <option>Euclidian Distance</option>
                 </select>
             </div>
 
@@ -172,23 +203,31 @@
                 </select>
             </div>
 
-            <button onclick="onClickFlag='agent_start';">Select Start Position</button>
-            <button onclick="onClickFlag='agent_end';">Select Goal Position</button>
-            
+            <button
+                onclick="onClickFlag='agent_start'; button_selection_css('select_start_button', ['select_goal_button','toggle_obstacle_button'])"
+                id="select_start_button" class="">Select Start
+                Position</button>
+            <button
+                onclick="onClickFlag='agent_end'; button_selection_css('select_goal_button', ['select_start_button','toggle_obstacle_button'])"
+                id="select_goal_button" class="">Select Goal Position</button>
+
             <!-- MAZE!!! -->
             <div id="main-maze"></div>
 
             <!-- MAPF Solution Cost/Time -->
-            <button onclick="visualise_solution_flag=true;">Solve</button>
+            <div class="center">
+                <button onclick="visualise_solution_flag=true;"
+                    style="font-size: 20px; padding: 10px 25px 10px 25px;">SOLVE</button>
+            </div>
 
-            <br> 
+            <br>
 
             <div class="center">
                 <div class="solution-badges">
                     <span class="name" color="primary">Execution Cost</span>
                     <span id="execution-cost" class="score">N/A</span>
                 </div>
-                
+
                 <div class="solution-badges">
                     <span class="name" color="primary">Execution Time</span>
                     <span id="execution-time" class="score">N/A</span>
@@ -205,11 +244,11 @@
             <h1>MAPF STATISTICS</h1>
             <p>View MAPF algorithm execution statistics for saved mazes.</p>
 
-            
+
             <div id="select-maze-statistics" style="display:inline"></div>
             <button onclick="getStats()" data-inline="true">Go</button>
-            
-            
+
+
             <canvas id="myChart" style="width:100%" class="center"></canvas>
         </div>
 
@@ -222,7 +261,7 @@
 
             <h2>Get in Touch</h2>
             <p>Please feel free to reach out for any questions, feedback or collaboration!</p>
-            <div style="display:none;">ABHINAV WAS HERE</div>
+
             <a href="mailto:anushadatta@gmail.com"><i class="fa fa-envelope"></i></a>
 
             <a href="https://www.linkedin.com/in/anusha-datta/" target="_blank"><i class="fa fa-linkedin"></i></a>

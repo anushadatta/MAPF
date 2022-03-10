@@ -84,7 +84,7 @@ const clearSketch = p5 => {
 const colourBox = (p5, index, fillValue) => {
     let i = index[0],
         j = index[1];
-    if (typeof fillValue === "number") {
+    if (typeof fillValue === "number" || typeof fillValue === "string") {
         p5.fill(fillValue);
     } else {
         p5.fill(fillValue[0], fillValue[1], fillValue[2]);
@@ -143,6 +143,9 @@ const placeAgentGoal = (p5, index) => {
 
 // function to place maze wall on click
 const placeMazeWallOnClick = p5 => {
+
+
+
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -158,6 +161,11 @@ const placeMazeWallOnClick = p5 => {
 };
 // place agent on Click
 const placeAgentStartOnClick = p5 => {
+
+    // set button as selected
+    select_start_button = document.getElementById('select_start_button');
+    select_start_button.classList.add("button-clicked");
+
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -174,6 +182,7 @@ const placeAgentStartOnClick = p5 => {
 
 // place agent on Click
 const placeAgentEndOnClick = p5 => {
+
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (

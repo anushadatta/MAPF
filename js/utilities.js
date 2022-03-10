@@ -21,6 +21,21 @@ const updateDropdown = () => {
     }
 }
 
+// buttons select/unselect
+const button_selection_css = (selected_button_id, unselected_button_id) => {
+    
+    // unselect other buttons
+    unselected_button = document.getElementById(unselected_button_id[0]);
+    unselected_button.classList.remove("button-clicked");
+
+    unselected_button = document.getElementById(unselected_button_id[1]);
+    unselected_button.classList.remove("button-clicked");
+
+    // set button as selected 
+    selected_button = document.getElementById(selected_button_id);
+    selected_button.classList.add("button-clicked");
+}
+
 // get user mapf data upon loading of app
 const getUserMapfData = async () => {
     // TODO: get the user token to query data

@@ -172,27 +172,10 @@ div.sticky-navbar {
 }
 
 
-/* Making images responsive - About, Education, Blog */
+/* Making images responsive - MAPF Introduction */
 
 #about img {
     max-width: 90%;
-    display: inline-block;
-    height: auto;
-}
-
-#education img {
-    max-width: 85%;
-    display: inline-block;
-    height: auto;
-}
-
-.blogimg {
-    max-width: 400px;
-}
-
-.blogimg img {
-    max-width: 50%;
-    max-height: 50%;
     display: inline-block;
     height: auto;
 }
