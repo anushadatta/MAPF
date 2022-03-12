@@ -18,7 +18,8 @@ def lambda_handler(event, context):
     table = dynamodb.Table(TABLE_NAME)
 
     maze_id = str(uuid.uuid4())
-    user_id = 'x'
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+    print(user_id)
     maze_name = event_body['maze_name']
     maze_string = event_body['maze_string']
 
