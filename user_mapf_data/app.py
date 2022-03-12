@@ -18,7 +18,9 @@ def lambda_handler(event, context):
     maze_table = dynamodb.Table(MAZE_TABLE)
     stats_table = dynamodb.Table(STATS_TABLE)
 
-    user_id = 'x'
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+    print(user_id)
+
     response = None
     status_code = 200
 
@@ -45,7 +47,7 @@ def lambda_handler(event, context):
         'headers': {
             'Access-Control-Allow-Headers': 'Content-Type,Authorization,x-api-key',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
         },
         "body": json.dumps(response),
     }

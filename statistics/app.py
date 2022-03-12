@@ -15,7 +15,9 @@ def lambda_handler(event, context):
     TABLE_NAME = os.environ.get("TABLE")
     table = dynamodb.Table(TABLE_NAME)
 
-    user_id = 'x'
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+    print(user_id)
+    
     response = None
     status_code = 200
 

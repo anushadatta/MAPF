@@ -162,6 +162,11 @@ Resources:
       StageName: default
       Cors: "'*'"
       Name: MapfGateway
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:ap-southeast-1:590170059730:userpool/ap-southeast-1_kCpcekVL4
 
   MazeTable:
     Type: AWS::Serverless::SimpleTable
