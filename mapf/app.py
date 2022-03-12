@@ -54,12 +54,13 @@ def lambda_handler(event, context):
         agents_data[i+1] = list(map(tuple,data))
 
     grid_maze = event_body['maze']
+    heuristic_string = event_body['heuristic']
 
     print(np.array(grid_maze))
     print(agents_data)
 
     start = datetime.now()
-    maze_solution = mapf(agents_data, grid_maze)
+    maze_solution = mapf(agents_data, grid_maze, heuristic_string)
     end = datetime.now()
     time = (end-start).total_seconds()
 

@@ -1,5 +1,6 @@
 from astar import *
 
+
 def computeConflicts(agent1, agent2, path1, path2):
 
     conflicts = []
@@ -113,14 +114,14 @@ def filter_conflicts(conflicts, agent):
     return agent_conflicts
 
 # compute solution for agent given new constraints
-def compute_updated_solution(agent, agent_positions, conflicts, grid_maze):
+def compute_updated_solution(agent, agent_positions, conflicts, grid_maze, heuristic_string):
     
     # compute updated path
     start = agent_positions[0]
     end = agent_positions[1]
     agent_conflicts = filter_conflicts(conflicts, agent)
     
-    path = astar(grid_maze, start, end, agent_conflicts)
+    path = astar(grid_maze, start, end, agent_conflicts, heuristic_string)
     # print(agent, start, end, agent_conflicts)
     path = path + [start]             # add start position
     path = path[::-1]                 # reverse solution 

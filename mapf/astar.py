@@ -4,24 +4,38 @@ import numpy as np
 # Heuristics
 # a, b: (x,y) coordinated
 
+# Djikstra's/BFS
+def no_heuristic(a,b):
+    return 0
+
 # Taxi Cab Geometry
 def manhattan_heuristic(a, b):
     # |x2 - x1| + |y2 - y1|
     dx = abs(b[0]-a[0])
-    dy = abs(b[1]-a[2])
+    dy = abs(b[1]-a[1])
     return (dx + dy)
 
 # Chessboard movements Distance
 def chebyshev_heuristic(a,b):
     dx = abs(b[0]-a[0])
-    dy = abs(b[1]-a[2])
+    dy = abs(b[1]-a[1])
     return max(dx, dy)
 
 # Straight Line Distance (most useful for diagonal line movements)
 def euclidian_heuristic(a,b): 
     return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
 
-def astar(grid_maze, start, goal, constraints):
+heuristics = {
+    "no_heuristic": no_heuristic,
+    "manhattan_heuristic": manhattan_heuristic,
+    "chebyshev_heuristic": chebyshev_heuristic,
+    "euclidian_heuristic": euclidian_heuristic
+}
+
+def astar(grid_maze, start, goal, constraints, heuristic_string):
+
+    # reference heuristic from dictionary
+    heuristic = heuristics[heuristic_string]
 
     # agent can move in 4 directions (+wait)
     moves = [(0,1),(0,-1),(1,0),(-1,0),(0,0)] 
@@ -36,7 +50,7 @@ def astar(grid_maze, start, goal, constraints):
     gscore = {start:0}
 
     # {position: f(n)} [f(n) = g(n) + h(n)]
-    fscore = {start:euclidian_heuristic(start, goal)}
+    fscore = {start: heuristic(start, goal)}
 
     # all neighbour positions considered for next step (f(n), position)
     min_heap = []
@@ -113,7 +127,7 @@ def astar(grid_maze, start, goal, constraints):
 
             # compute g(n) for neighbour (+1 for move/wait)
             neighbour_g_score = gscore[current_position] + 1 
-            neighbour_heuristic = euclidian_heuristic(neighbor, goal)
+            neighbour_heuristic = heuristic(neighbor, goal)
 
             neighbour_f_score = neighbour_g_score + neighbour_heuristic
             

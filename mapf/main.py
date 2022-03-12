@@ -8,7 +8,7 @@ from ct_functions import *
 from conflict_tree import ConflictNode
 from itertools import combinations
 
-def mapf(agents_data, grid_maze):
+def mapf(agents_data, grid_maze, heuristic_string):
 
     agents_list = list(agents_data.keys())
     agent_combinations = list(combinations(agents_list, 2))
@@ -23,7 +23,7 @@ def mapf(agents_data, grid_maze):
         start = agents_data[agent][0]
         end = agents_data[agent][1]
         
-        route = astar(grid, start, end, conflicts)
+        route = astar(grid, start, end, conflicts, heuristic_string)
         route = route + [start]             # add start position
         route = route[::-1]                 # reverse solution 
 
@@ -77,7 +77,8 @@ def mapf(agents_data, grid_maze):
                     agent1, 
                     agent_positions, 
                     updated_conflicts, 
-                    grid)
+                    grid,
+                    heuristic_string)
 
                 current_node.right = ConflictNode(updated_conflicts, updated_solutions)
                 current_node.right.computeTotalCost()
@@ -91,7 +92,8 @@ def mapf(agents_data, grid_maze):
                     agent2,             # current agent number
                     agent_positions,    # start/end positions
                     updated_conflicts,  
-                    grid)              
+                    grid,
+                    heuristic_string)              
                 
                 current_node.left = ConflictNode(updated_conflicts, updated_solutions)
                 current_node.right.computeTotalCost()
