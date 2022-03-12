@@ -5,6 +5,7 @@ import json
 from decimal import Decimal
 import boto3
 from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key, Attr
 import os
 
 
@@ -17,14 +18,17 @@ def lambda_handler(event, context):
 
     event_body = json.loads(event['body'])
     maze_id = event_body['maze_id']
-    
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+    print(user_id)
+
     status_code = 200
     
     try:
         response = table.delete_item(
             Key={
-                'maze_id':maze_id
+                'maze_id':maze_id,
             },
+            ConditionExpression=Attr('user_id').eq(user_id),
         )
     except ClientError as e:
         response = e.response['Error']['Message']
