@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 import os
 import uuid
 
-def POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp):
+def POST_stats_table(maze_id, user_id, maze_name, execution_cost, execution_time, agents_count, lower_level_solver, timestamp):
 
     try:
         dynamodb = boto3.resource('dynamodb')
@@ -17,13 +17,13 @@ def POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_co
         table = dynamodb.Table(TABLE_NAME)
 
         run_id = str(uuid.uuid4())
-        user_id = 'x'
 
         table.put_item(
         Item={
                 'run_id': run_id,
-                'maze_id': maze_id,
                 'user_id': user_id,
+                'maze_id': maze_id,
+                'maze_name': maze_name,
                 'execution_cost': execution_cost,
                 'execution_time': str(execution_time),
                 'agents_count': agents_count,
@@ -44,6 +44,7 @@ def POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_co
 
 def lambda_handler(event, context):
 
+    # MAPF Execution
     # format event for mapf
     event_body = json.loads(event['body'])
     
@@ -59,34 +60,39 @@ def lambda_handler(event, context):
     print(np.array(grid_maze))
     print(agents_data)
 
-    start = datetime.now()
-    maze_solution = mapf(agents_data, grid_maze, heuristic_string)
-    end = datetime.now()
-    time = (end-start).total_seconds()
+    try: 
+        start = datetime.now()
+        maze_solution = mapf(agents_data, grid_maze, heuristic_string)
+        end = datetime.now()
+        time = (end-start).total_seconds()
 
-    agents = 0
-    cost = 0
-    for key in maze_solution:
-        cost+=len(maze_solution[key])-1
-        agents +=1
+        agents = 0
+        cost = 0
+        for key in maze_solution:
+            cost+=len(maze_solution[key])-1
+            agents +=1
 
-    response_body = {
-        "time":time,
-        "cost":cost,
-        "mazeSolution":maze_solution
-    }
+        response_body = {
+            "time":time,
+            "cost":cost,
+            "mazeSolution":maze_solution
+        }
 
+    except:
+        response = "TimeoutError: Connection timed out"
+        status_code = 400
+
+    # POST Statistics
     maze_id = event_body.get('maze_id','NA')
-    user_id = 'x'
+    maze_name = event_body.get('maze_name', 'NA')
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
     execution_cost= cost
     execution_time = time
     agents_count = agents
-    lower_level_solver = event_body.get('lower_level_solver','NA')
-    # TODO: write all possible string values
-    LOWER_LEVEL_SOlVER = {}
+    lower_level_solver = heuristic_string
     timestamp= start
 
-    response, status_code = POST_stats_table(maze_id, user_id, execution_cost, execution_time, agents_count, lower_level_solver, timestamp)
+    response, status_code = POST_stats_table(maze_id, user_id, maze_name, execution_cost, execution_time, agents_count, lower_level_solver, timestamp)
 
     if status_code==400:
         response_body = response
