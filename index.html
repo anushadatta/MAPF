@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/main-page.css">
 
     <!-- JS -->
+    <script src="js/DB/mazeDB.js"></script>
     <script src="js/utilities.js" defer></script>
     <script src="js/colors.js" defer></script>
     <script src="js/statistics.js" defer></script>
@@ -29,7 +30,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body onload="getUserMapfData(); updateDropdown()">
+<body onload="onload();">
 
     <!-- Landing page -->
     <header id="home" class="showcase">
@@ -46,6 +47,9 @@
 
         <!-- Scroll arrow -->
         <a href="#navbar"> <img src="assets/arrow.png" class="arrow" alt="scroll"> </a>
+
+        <a
+            href="https://mapf.auth.ap-southeast-1.amazoncognito.com/login?response_type=code&client_id=6advc92vpibvv22rgso6lqbpha&redirect_uri=https://um747uooob.execute-api.ap-southeast-1.amazonaws.com/stage/">LOGIN</a>
 
     </header>
 
@@ -123,14 +127,10 @@
             <!-- TODO: GET mazes from DB API -->
             <div class="grid-3 center" style="width:75%; text-align: left;">
                 <div class="vertical-center">
-                    Load all Saved Mazes:
+                    Load Saved Maze:
                 </div>
                 <div class="vertical-center">
-                    <select>
-                        <option>Maze 1</option>
-                        <option>Maze 2</option>
-                        <option>Maze 3</option>
-                    </select>
+                    <select id="load_saved_maze_dropdown"></select>
                 </div>
                 <div style="text-align: right;" class="vertical-center">
                     <button onclick="getStats()" data-inline="true" style="width:130px">Go</button>
@@ -174,7 +174,7 @@
 
                 <!-- Save current maze -->
                 <button onClick="">Update Maze</button>
-                <button onClick="">Delete Maze</button>
+                <button onClick="MazeDB.DELETE()">Delete Maze</button>
             </div>
             <br>
 
@@ -186,7 +186,7 @@
                     Number of Agents (Max. 15):
                 </div>
                 <div>
-                    <input id="numAgents" type="number" min="1" max="15" value="1" onchange="updateDropdown()">
+                    <input id="numAgents" type="number" min="1" max="15" value="1" onchange="updateNumAgentsDropdown()">
                 </div>
             </div>
 
@@ -196,6 +196,7 @@
                 </div>
                 <div>
                     <select id="a_star_heuristic">
+                        <option value="no_heuristic">No Heuristic</option>
                         <option value="manhattan_heuristic">Manhattan Distance</option>
                         <option value="chebyshev_heuristic">Chebyshev Distance</option>
                         <option value="euclidian_heuristic">Euclidian Distance</option>

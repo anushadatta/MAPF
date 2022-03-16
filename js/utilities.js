@@ -1,20 +1,58 @@
+// will run onload
+const onload = async () => {
+    authOnLoad();
+
+    const { mazes: mazesAwsData, statistics: statsAwsData } = await api(
+        "GET",
+        "user_mapf_data",
+        {}
+    );
+    // console.log(MazeDB.endpoint)
+
+    MazeDB.setMazeDB(mazesAwsData);
+    updateNumAgentsDropdown();
+}
+
+// Authentication: Global variables
+let authObject = {
+    id_token: "",
+    //   access_token: "",
+    //   refresh_token: "",
+};
+
+// run this function when page is loaded
+const authOnLoad = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("id_token")) {
+        //   logged in
+        authObject["id_token"] = params.get("id_token");
+        // authObject["access_token"] = params.get("access_token");
+        // authObject["refresh_token"] = params.get("refresh_token");
+
+    } else {
+        //   not logged in
+        console.log("not logged in");
+    }
+};
+
+
 // update agents count dropdown
 // MAPF variables "Select Number of Agents (Max. 15):" dropdown
-const updateDropdown = () => {
-    
+const updateNumAgentsDropdown = () => {
+
     // clear maze every time number of agents updated by user
     clear_flag = true;
-    
+
     // only allow integer inputs in dropdown
     let numAgents = parseInt(document.getElementById("numAgents").value);
-    document.getElementById("numAgents").value=numAgents;
+    document.getElementById("numAgents").value = numAgents;
 
     // limit number of agents to 15
-    if(numAgents>15){
-        document.getElementById("numAgents").value=15;
-        numAgents=15;
+    if (numAgents > 15) {
+        document.getElementById("numAgents").value = 15;
+        numAgents = 15;
     }
-    
+
     // populate agent dropdown based on count entered by user
     const dropdownNode = document.getElementById("agent_dropdown");
     dropdownNode.innerHTML = "";
@@ -30,7 +68,7 @@ const updateDropdown = () => {
 
 // buttons select/unselect
 const button_selection_css = (selected_button_id, unselected_button_id) => {
-    
+
     // unselect other buttons
     unselected_button = document.getElementById(unselected_button_id[0]);
     unselected_button.classList.remove("button-clicked");
@@ -43,57 +81,34 @@ const button_selection_css = (selected_button_id, unselected_button_id) => {
     selected_button.classList.add("button-clicked");
 }
 
-// get user mapf data upon loading of app
-const getUserMapfData = async () => {
-    // TODO: get the user token to query data
-    const { mazes: mazesAwsData, statistics: statsAwsData } = await api(
-      "GET",
-      "user_mapf_data",
-      {}
-    );
-    // console.log(mazesAwsData, statsAwsData);
-    // update mazes dropdown
-    //   getSavedMazes(mazesAwsData);
-  
-    // update stats dropdown
-  };
-  
-  // make api call and return value
-  const api = async (method, endpoint, body) => {
+// make api call and return value
+const api = async (method, endpoint, body) => {
     const BASE_URL =
-      "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
+        "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
     const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+
+    console.log(authObject["id_token"])
+    myHeaders.append("Authorization", authObject["id_token"]);
     const raw = JSON.stringify(body);
-  
+
     let requestOptions = {
-      method,
-      redirect: "follow",
+        method,
+        redirect: "follow",
     };
+
     if (method != "GET") {
-        console.log(raw)
-      requestOptions["body"] = raw;
-      requestOptions["headers"] = myHeaders;
+        requestOptions["body"] = raw;
+        myHeaders.append("Content-Type", "application/json");
+
     }
-  
+
+    requestOptions["headers"] = myHeaders;
+    // requestOptions["mode"] = 'no-cors';
+
+    console.log(`${BASE_URL}/${endpoint}`, requestOptions)
     const res = await (
-      await fetch(`${BASE_URL}/${endpoint}`, requestOptions)
+        await fetch(`${BASE_URL}/${endpoint}`, requestOptions)
     ).json();
-  
+
     return res;
-  };
-  
-  // api("GET", "/maze").then(console.log);
-  //
-  // var requestOptions = {
-  //   method: "GET",
-  //   redirect: "follow",
-  // };
-  
-  // fetch(
-  //   "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage/maze",
-  //   requestOptions
-  // )
-  //   .then((response) => response.text())
-  //   .then((result) => console.log(result))
-  //   .catch((error) => console.log("error", error));
+};

@@ -263,7 +263,7 @@ const validate = () => {
     return validatePositions;
 }
 
-const formatApiBody = () => {
+const formatSolverApiBody = () => {
 
     // get selected A* heuristic
     const heuristic = document.getElementById("a_star_heuristic").value;
@@ -283,7 +283,13 @@ const formatApiBody = () => {
         }
     }
 
-    return { maze: formattedMaze, agent_positions: agentPositions, heuristic }
+    return {
+        maze: formattedMaze,
+        agent_positions: agentPositions,
+        heuristic,
+        maze_name: "TODO",
+        maze_id: "TODO"
+    }
 
 }
 
@@ -323,23 +329,16 @@ function sketchMainMaze(p5) {
 
         if (visualise_solution_flag) {
             visualise_solution_flag = false;
+
             // checks if all the input is valid
             if (validate()) {
-                const apiBody = formatApiBody();
-                // make api call
-                // var myHeaders = new Headers();
-                // myHeaders.append("Content-Type", "application/json");
 
-                // var requestOptions = {
-                //     method: 'POST',
-                //     headers: myHeaders,
-                //     body: JSON.stringify(apiBody),
+                clearAnimation(p5);
 
-                // };
-                // fetch("https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage/solve", requestOptions).then(response => response.json()).then(console.log).catch(error => console.log('error', error));
-
+                const apiBody = formatSolverApiBody();
                 const { mazeSolution, time, cost } = await api("POST", "solve", apiBody);
                 console.log(mazeSolution);
+
                 document.getElementById("execution-time").innerHTML = time;
                 document.getElementById("execution-cost").innerHTML = cost;
                 await visualiseMazeSolution(p5, mazeSolution);
