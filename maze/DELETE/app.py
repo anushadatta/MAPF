@@ -13,8 +13,11 @@ def lambda_handler(event, context):
 
     dynamodb = boto3.resource('dynamodb')
 
-    TABLE_NAME = os.environ.get("TABLE")
-    table = dynamodb.Table(TABLE_NAME)
+    MAZE_TABLE = os.environ.get("MAZE_TABLE")
+    STATS_TABLE = os.environ.get("STATS_TABLE")
+
+    maze_table = dynamodb.Table(MAZE_TABLE)
+    stats_table = dynamodb.Table(STATS_TABLE)
 
     event_body = json.loads(event['body'])
     maze_id = event_body['maze_id']
@@ -24,12 +27,25 @@ def lambda_handler(event, context):
     status_code = 200
     
     try:
-        response = table.delete_item(
+        response_maze = maze_table.delete_item(
             Key={
-                'maze_id':maze_id,
+                'maze_id': maze_id,
             },
             ConditionExpression=Attr('user_id').eq(user_id),
         )
+        stats_record = stats_table.scan(
+            FilterExpression=Attr('maze_id').eq(maze_id))["Items"]
+
+        # deleting multiple records using batch writer
+        with stats_table.batch_writer() as batch:
+            for stat_record in stats_record:
+                run_id = stat_record["run_id"]
+                batch.delete_item(Key={'run_id': run_id, })
+
+        response = {
+            "maze": "deleted",
+            "stats": "deleted"
+        }
     except ClientError as e:
         response = e.response['Error']['Message']
         status_code = 400

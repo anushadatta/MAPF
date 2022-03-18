@@ -81,10 +81,13 @@ Resources:
       CodeUri: maze/DELETE/
       Policies:
         - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+        - DynamoDBCrudPolicy:
             TableName: !Ref MazeTable
       Environment:
         Variables:
-          TABLE: !Ref MazeTable
+          MAZE_TABLE: !Ref MazeTable
+          STATS_TABLE: !Ref RunStatisticsTable
       Events:
         ApiEvent:
           Type: Api 
@@ -93,8 +96,6 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
-
-
 
   SolverFunction:
     Type: AWS::Serverless::Function 
