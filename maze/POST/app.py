@@ -23,14 +23,18 @@ def lambda_handler(event, context):
     maze_name = event_body['maze_name']
     maze_string = event_body['maze_string']
 
+    maze_record = {
+        'maze_id': maze_id,
+        'user_id': user_id,
+        'maze_name': maze_name,
+        'maze_string': maze_string
+    }
+
     response = table.put_item(
-       Item={
-            'maze_id': maze_id,
-            'user_id': user_id,
-            'maze_name': maze_name,
-            'maze_string': maze_string
-        }
+       Item= maze_record
     )
+
+    response["maze_record"] = maze_record
 
     return {
         "statusCode": 200,
