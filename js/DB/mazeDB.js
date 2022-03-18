@@ -67,8 +67,11 @@ class MazeDB {
 
     // create new maze
     static async POST() {
+
+        let new_maze_name = document.getElementById("new_maze_name").value
+
         const body = {
-            maze_name: document.getElementById("new_maze_name").value,
+            maze_name: new_maze_name,
             maze_string: JSON.stringify(graph),
         };
         const { maze_record: mazeRecord } = await api("POST", this.endpoint, body);
@@ -76,16 +79,20 @@ class MazeDB {
         // state management
         this.mazeRecords.push(mazeRecord);
 
-        // FE changes
+        // Front End changes
         this.updateDropdown();
         this.setIndex(mazeRecord.maze_id);
         document.getElementById("new_maze_name").value = "";
+
+        alert("New Maze " + new_maze_name + " created");
     }
 
     // delete maze
     static async DELETE() {
         const deleteIndex = this.getIndex();
+
         // copy of record
+        let deleted_maze_name = JSON.parse(JSON.stringify(this.mazeRecords[deleteIndex]))["maze_name"];
         const record = JSON.parse(JSON.stringify(this.mazeRecords[deleteIndex]));
         try {
             this.mazeRecords.splice(deleteIndex, 1);
@@ -93,6 +100,8 @@ class MazeDB {
             console.log(body);
             await api("DELETE", this.endpoint, body);
             this.updateDropdown();
+
+            alert("Maze " + deleted_maze_name + " deleted");
         } catch (err) {
             console.log(err);
         }

@@ -3,45 +3,40 @@ const OBSTACLE = 1;
 const AGENT = 2;
 const BOUNDARY = 3;
 
-
 let graph = [];
 let maze_flag = false;
 let clear_flag = false;
 let visualise_solution_flag = false;
-let animated = false
+let animated = false;
+let load_maze_flag = false;
 let onClickFlag = "maze";
 let place = () => { };
 let agentPositions = [];
 const HEIGHT = 500; //pixels
 const WIDTH = 950; //pixels
-const mazeHeight = 32; //units
-const mazeWidth = 52; //units
+const mazeHeight = 31; //units
+const mazeWidth = 51; //units
 const mazeHeightUnit = HEIGHT / mazeHeight; // pixels/unit
 const mazeWidthUnit = WIDTH / mazeWidth; // pixels/unit
 const maze_generation_algos = {
-    'rh': RandomizedHorizontals,
-    'rv': RandomizedVerticals,
-    'rd': RecursiveDivision
-}
+    rh: RandomizedHorizontals,
+    rv: RandomizedVerticals,
+    rd: RecursiveDivision,
+};
 
 // function to initialize the maze and the grid
 function initGrid(p5) {
     const numAgents = document.getElementById("numAgents").value;
     agentPositions = [];
     for (let i = 0; i < numAgents; i++) {
-        agentPositions.push([false, false])
+        agentPositions.push([false, false]);
     }
-    graph = []
+    graph = [];
 
     for (let i = 0; i < mazeHeight; i++) {
         var row = [];
         for (let j = 0; j < mazeWidth; j++) {
-            if (
-                i === 0 ||
-                j === 0 ||
-                i === mazeHeight - 1 ||
-                j === mazeWidth - 1
-            ) {
+            if (i === 0 || j === 0 || i === mazeHeight - 1 || j === mazeWidth - 1) {
                 row.push(BOUNDARY);
                 p5.fill(47, 56, 56); // border obstacles
             } else {
@@ -77,7 +72,7 @@ const animateMazeWalls = (p5, order) => {
 };
 
 // function to clear the entire grid to scratch
-const clearSketch = p5 => {
+const clearSketch = (p5) => {
     initGrid(p5);
 };
 
@@ -90,12 +85,7 @@ const colourBox = (p5, index, fillValue) => {
     } else {
         p5.fill(fillValue[0], fillValue[1], fillValue[2]);
     }
-    p5.rect(
-        mazeWidthUnit * j,
-        mazeHeightUnit * i,
-        mazeWidthUnit,
-        mazeHeightUnit
-    );
+    p5.rect(mazeWidthUnit * j, mazeHeightUnit * i, mazeWidthUnit, mazeHeightUnit);
 };
 
 // function to place maze wall
@@ -110,41 +100,46 @@ const placeMazeWall = (p5, index) => {
 };
 
 const placeAgentStart = (p5, index) => {
-
     let agent_number = document.getElementById("agent_dropdown").value - 1;
-    let agent_color = agent_colors[agent_number][0]
+    let agent_color = agent_colors[agent_number][0];
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][0]) {
         graph[index[0]][index[1]] = AGENT;
         agentPositions[agent_number][0] = index;
         colourBox(p5, index, agent_color);
-    } else if (graph[index[0]][index[1]] === AGENT && index[0] == agentPositions[agent_number][0][0] && index[1] == agentPositions[agent_number][0][1]) {
+    } else if (
+        graph[index[0]][index[1]] === AGENT &&
+        index[0] == agentPositions[agent_number][0][0] &&
+        index[1] == agentPositions[agent_number][0][1]
+    ) {
         graph[index[0]][index[1]] = EMPTY;
         agentPositions[agent_number][0] = false;
         colourBox(p5, index, 255);
     }
-}
+};
 
 const placeAgentGoal = (p5, index) => {
-
     let agent_number = document.getElementById("agent_dropdown").value - 1;
-    let agent_color = agent_colors[agent_number][1]
+    let agent_color = agent_colors[agent_number][1];
 
     if (graph[index[0]][index[1]] === EMPTY && !agentPositions[agent_number][1]) {
         graph[index[0]][index[1]] = AGENT;
         agentPositions[agent_number][1] = index;
 
         colourBox(p5, index, agent_color);
-    } else if (graph[index[0]][index[1]] === AGENT && index[0] == agentPositions[agent_number][1][0] && index[1] == agentPositions[agent_number][1][1]) {
+    } else if (
+        graph[index[0]][index[1]] === AGENT &&
+        index[0] == agentPositions[agent_number][1][0] &&
+        index[1] == agentPositions[agent_number][1][1]
+    ) {
         graph[index[0]][index[1]] = EMPTY;
         agentPositions[agent_number][1] = false;
         colourBox(p5, index, 255);
     }
-}
+};
 
 // function to place maze wall on click
-const placeMazeWallOnClick = p5 => {
-
+const placeMazeWallOnClick = (p5) => {
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -160,10 +155,9 @@ const placeMazeWallOnClick = p5 => {
 };
 
 // place agent on Click
-const placeAgentStartOnClick = p5 => {
-
+const placeAgentStartOnClick = (p5) => {
     // set button as selected
-    select_start_button = document.getElementById('select_start_button');
+    select_start_button = document.getElementById("select_start_button");
     select_start_button.classList.add("button-clicked");
 
     let index = calculateIndex(p5.mouseX, p5.mouseY);
@@ -181,8 +175,7 @@ const placeAgentStartOnClick = p5 => {
 };
 
 // place agent on Click
-const placeAgentEndOnClick = p5 => {
-
+const placeAgentEndOnClick = (p5) => {
     let index = calculateIndex(p5.mouseX, p5.mouseY);
 
     if (
@@ -197,8 +190,7 @@ const placeAgentEndOnClick = p5 => {
     place = () => { };
 };
 
-
-const clearAnimation = p5 => {
+const clearAnimation = (p5) => {
     for (let i = 0; i < graph.length; i++) {
         for (let j = 0; j < graph[0].length; j++) {
             if (graph[i][j] === 0) {
@@ -216,8 +208,8 @@ const clearAnimation = p5 => {
 // converts maze from maze string to visualize
 const loadMazeFromDropDown = (p5) => {
     initGrid(p5);
-    const parsedMaze = JSON.parse(MazeDB.getMazeString());
-    console.log(parsedMaze);
+    const { maze_string: MazeString } = MazeDB.getMazeRecord();
+    const parsedMaze = JSON.parse(MazeString);
     for (let i = 0; i < graph.length; i++) {
         for (let j = 0; j < graph[0].length; j++) {
             if (parsedMaze[i][j] == OBSTACLE) {
@@ -230,17 +222,16 @@ const loadMazeFromDropDown = (p5) => {
 // decides on click function based on the global flag
 // the global flag is decided from the buttons
 const onTouchFunctions = {
-    "maze": placeMazeWallOnClick,
-    "agent_start": placeAgentStartOnClick,
-    "agent_end": placeAgentEndOnClick,
-}
+    maze: placeMazeWallOnClick,
+    agent_start: placeAgentStartOnClick,
+    agent_end: placeAgentEndOnClick,
+};
 
 function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 const visualiseMazeSolution = async (p5, mapfSolution) => {
-
     let maxLength = 0;
     // finding agent with longest path
     for (let key of Object.keys(mapfSolution)) {
@@ -261,8 +252,7 @@ const visualiseMazeSolution = async (p5, mapfSolution) => {
         // }, 0);
         await delay(500);
     }
-
-}
+};
 
 // making sure that the api call isn't made if input isn't correct
 const validate = () => {
@@ -276,10 +266,9 @@ const validate = () => {
         alert("Select all start and end positions");
     }
     return validatePositions;
-}
+};
 
 const formatSolverApiBody = () => {
-
     const { maze_name, maze_id } = MazeDB.getMazeRecord();
 
     // get selected A* heuristic
@@ -293,8 +282,7 @@ const formatSolverApiBody = () => {
         for (let j = 0; j < formattedMaze[i].length; j++) {
             if (formattedMaze[i][j] == AGENT) {
                 formattedMaze[i][j] = EMPTY;
-            }
-            else if (formattedMaze[i][j] == BOUNDARY) {
+            } else if (formattedMaze[i][j] == BOUNDARY) {
                 formattedMaze[i][j] = OBSTACLE;
             }
         }
@@ -305,23 +293,21 @@ const formatSolverApiBody = () => {
         agent_positions: agentPositions,
         heuristic,
         maze_name,
-        maze_id
-    }
-
-}
-
+        maze_id,
+    };
+};
 
 function sketchMainMaze(p5) {
     p5.setup = function () {
         p5.createCanvas(WIDTH, HEIGHT);
         p5.background(220);
         initGrid(p5);
-    }
+    };
     p5.draw = async function () {
         // stuff to draw
         place(p5);
 
-        // if the navbar communicates to generate a maze 
+        // if the navbar communicates to generate a maze
         // Reset Maze
         if (clear_flag) {
             clear_flag = false;
@@ -334,10 +320,18 @@ function sketchMainMaze(p5) {
             clearAnimation(p5);
         }
 
-        if (maze_flag) {
-            selected_maze_generation_algo = document.getElementById('maze-generation-algo').value
+        if (load_maze_flag) {
+            load_maze_flag = false;
+            loadMazeFromDropDown(p5);
+        }
 
-            let mazeOrder = maze_generation_algos[selected_maze_generation_algo](graph)
+        if (maze_flag) {
+            selected_maze_generation_algo = document.getElementById(
+                "maze-generation-algo"
+            ).value;
+
+            let mazeOrder =
+                maze_generation_algos[selected_maze_generation_algo](graph);
             if (mazeOrder) {
                 animateMazeWalls(p5, mazeOrder);
                 maze_flag = false;
@@ -349,26 +343,27 @@ function sketchMainMaze(p5) {
 
             // checks if all the input is valid
             if (validate()) {
-
                 clearAnimation(p5);
 
                 const apiBody = formatSolverApiBody();
-                console.log(JSON.stringify(apiBody));
-                const { mazeSolution, time, cost } = await api("POST", "solve", apiBody);
-                console.log(mazeSolution);
+
+                const { mazeSolution, time, cost } = await api(
+                    "POST",
+                    "solve",
+                    apiBody
+                );
 
                 document.getElementById("execution-time").innerHTML = time;
                 document.getElementById("execution-cost").innerHTML = cost;
                 await visualiseMazeSolution(p5, mazeSolution);
             }
         }
-    }
+    };
 
     // p5js inbuilt method to detect screen touches
     p5.touchStarted = () => {
         place = onTouchFunctions[onClickFlag];
     };
-
 }
 
-new p5(sketchMainMaze, 'main-maze')
+new p5(sketchMainMaze, "main-maze");
