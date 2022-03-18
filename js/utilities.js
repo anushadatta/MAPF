@@ -7,10 +7,12 @@ const onload = async () => {
         "user_mapf_data",
         {}
     );
-    // console.log(MazeDB.endpoint)
-
     MazeDB.setMazeDB(mazesAwsData);
     updateNumAgentsDropdown();
+
+    statsData = statsAwsData;
+    // console.log(statsData)
+    // updateStats();
 };
 
 // Authentication: Global variables

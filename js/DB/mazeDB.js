@@ -32,13 +32,22 @@ class MazeDB {
     }
     static updateDropdown() {
         // update dropdown
-        const dropdownNode = document.getElementById("load_saved_maze_dropdown");
-        dropdownNode.innerHTML = "";
-        for (let i = 0; i < this.mazeRecords.length; i++) {
-            const optionNode = document.createElement("option");
-            optionNode.innerHTML = this.mazeRecords[i]["maze_name"];
-            optionNode.setAttribute("value", this.mazeRecords[i]["maze_id"]); // value is index of maze node in mazeRecords
-            dropdownNode.appendChild(optionNode);
+        const dropdownIds = ["load_saved_maze_dropdown", "stats_maze_dropdown"];
+        for (let i = 0; i < dropdownIds.length; i++) {
+            const dropdownNode = document.getElementById(dropdownIds[i]);
+            dropdownNode.innerHTML = "";
+            if (dropdownIds[i] == "stats_maze_dropdown") {
+                let optionNodeTemp = document.createElement("option");
+                optionNodeTemp.innerHTML = "All mazes";
+                optionNodeTemp.setAttribute("value", "All"); // value is index of maze node in mazeRecords
+                dropdownNode.appendChild(optionNodeTemp);
+            }
+            for (let i = 0; i < this.mazeRecords.length; i++) {
+                const optionNode = document.createElement("option");
+                optionNode.innerHTML = this.mazeRecords[i]["maze_name"];
+                optionNode.setAttribute("value", this.mazeRecords[i]["maze_id"]); // value is index of maze node in mazeRecords
+                dropdownNode.appendChild(optionNode);
+            }
         }
     }
 
@@ -48,6 +57,7 @@ class MazeDB {
         const mazeIndex = this.getIndex();
 
         // making the api body, removing the user_id and maze_name
+        let updated_maze_name = JSON.parse(JSON.stringify(this.mazeRecords[mazeIndex]))["maze_name"];
         let mazeRecord = JSON.parse(JSON.stringify(this.mazeRecords[mazeIndex]));
         delete mazeRecord.user_id;
         delete mazeRecord.maze_name;
@@ -63,6 +73,10 @@ class MazeDB {
         mazeRecord["maze_string"] = JSON.stringify(graphCopy);
 
         await api("PUT", this.endpoint, mazeRecord);
+        this.mazeRecords[mazeIndex]["maze_string"] = JSON.stringify(graphCopy);
+
+        alert("Maze " + updated_maze_name + " updated");
+
     }
 
     // create new maze

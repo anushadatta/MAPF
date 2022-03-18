@@ -12,9 +12,9 @@
 
     <!-- JS -->
     <script src="js/DB/mazeDB.js"></script>
-    <script src="js/utilities.js" defer></script>
     <script src="js/colors.js" defer></script>
     <script src="js/statistics.js" defer></script>
+    <script src="js/utilities.js" defer></script>
     <script src="js/maze-generation.js" defer></script>
     <script src="js/mazeGenerationAlgos/RandomizedHorizontals.js"></script>
     <script src="js/mazeGenerationAlgos/RandomizedVerticals.js"></script>
@@ -268,10 +268,23 @@
 
 
             <div id="select-maze-statistics" style="display:inline"></div>
-            <button onclick="getStats()" data-inline="true">Go</button>
+            <div>
+                <select id="stats_maze_dropdown">
+                </select>
+                <select id="stats_heuristic">
+                    <option value="All">All Heuristics</option>
+                    <option value="no_heuristic">No Heuristic</option>
+                    <option value="manhattan_heuristic">Manhattan Distance</option>
+                    <option value="chebyshev_heuristic">Chebyshev Distance</option>
+                    <option value="euclidian_heuristic">Euclidian Distance</option>
+                </select>
+            </div>
+            <button onclick="updateStats()" data-inline="true">Go</button>
 
+            <canvas id="scatter-chart" style="width:100%" class="center"></canvas>
+            <canvas id="time-line-chart" style="width:100%" class="center"></canvas>
+            <canvas id="cost-line-chart" style="width:100%" class="center"></canvas>
 
-            <canvas id="myChart" style="width:100%" class="center"></canvas>
         </div>
 
         <hr class="center">
