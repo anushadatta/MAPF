@@ -19,9 +19,9 @@ class MazeDB {
         document.getElementById("load_saved_maze_dropdown").value = maze_id;
     }
 
-    static getMazeString() {
+    static getMazeRecord() {
         const mazeIndex = this.getIndex();
-        return this.mazeRecords[mazeIndex].maze_string;
+        return this.mazeRecords[mazeIndex];
     }
 
     // GET not required cos of onload()

@@ -212,6 +212,21 @@ const clearAnimation = p5 => {
     animated = false;
 };
 
+// when GO is pressed this function runs
+// converts maze from maze string to visualize
+const loadMazeFromDropDown = (p5) => {
+    initGrid(p5);
+    const parsedMaze = JSON.parse(MazeDB.getMazeString());
+    console.log(parsedMaze);
+    for (let i = 0; i < graph.length; i++) {
+        for (let j = 0; j < graph[0].length; j++) {
+            if (parsedMaze[i][j] == OBSTACLE) {
+                placeMazeWall(p5, [i, j]);
+            }
+        }
+    }
+};
+
 // decides on click function based on the global flag
 // the global flag is decided from the buttons
 const onTouchFunctions = {
@@ -265,6 +280,8 @@ const validate = () => {
 
 const formatSolverApiBody = () => {
 
+    const { maze_name, maze_id } = MazeDB.getMazeRecord();
+
     // get selected A* heuristic
     const heuristic = document.getElementById("a_star_heuristic").value;
 
@@ -287,8 +304,8 @@ const formatSolverApiBody = () => {
         maze: formattedMaze,
         agent_positions: agentPositions,
         heuristic,
-        maze_name: "TODO",
-        maze_id: "TODO"
+        maze_name,
+        maze_id
     }
 
 }
@@ -336,6 +353,7 @@ function sketchMainMaze(p5) {
                 clearAnimation(p5);
 
                 const apiBody = formatSolverApiBody();
+                console.log(JSON.stringify(apiBody));
                 const { mazeSolution, time, cost } = await api("POST", "solve", apiBody);
                 console.log(mazeSolution);
 
