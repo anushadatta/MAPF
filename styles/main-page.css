@@ -179,3 +179,24 @@ div.sticky-navbar {
     display: inline-block;
     height: auto;
 }
+
+.delete-maze-modal{
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    width: 60%;
+    height: 30%;
+    z-index: 2;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}

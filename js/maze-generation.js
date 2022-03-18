@@ -14,8 +14,8 @@ let place = () => { };
 let agentPositions = [];
 const HEIGHT = 500; //pixels
 const WIDTH = 950; //pixels
-const mazeHeight = 31; //units
-const mazeWidth = 51; //units
+const mazeHeight = 32; //units
+const mazeWidth = 52; //units
 const mazeHeightUnit = HEIGHT / mazeHeight; // pixels/unit
 const mazeWidthUnit = WIDTH / mazeWidth; // pixels/unit
 const maze_generation_algos = {

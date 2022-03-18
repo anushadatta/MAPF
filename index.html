@@ -116,7 +116,7 @@
                 </div>
 
                 <div style="text-align: right;" class="vertical-center">
-                    <button onclick="maze_flag=true" data-inline="true" class="button" style="width:130px">Create New
+                    <button onclick="MazeDB.POST();" data-inline="true" class="button" style="width:130px">Create New
                         Maze</button>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                     <select id="load_saved_maze_dropdown"></select>
                 </div>
                 <div style="text-align: right;" class="vertical-center">
-                    <button onclick="getStats()" data-inline="true" style="width:130px">Go</button>
+                    <button onclick="load_maze_flag=true;" data-inline="true" style="width:130px">Go</button>
                 </div>
             </div>
 
@@ -166,29 +166,27 @@
                 <button
                     onClick="onClickFlag='maze'; button_selection_css('toggle_obstacle_button', ['select_goal_button','select_start_button'])"
                     id="toggle_obstacle_button" class="button-clicked">Toggle
-                    obstacle</button>
+                    Obstacle</button>
 
                 <!-- Clear Maze -->
                 <button onClick="animated=true;">Clear Animation</button>
                 <button onClick="clear_flag=true">Reset Maze</button>
 
                 <!-- Save current maze -->
-                <button onClick="">Update Maze</button>
-                <button onClick="MazeDB.DELETE()">Delete Maze</button>
+                <button onClick="MazeDB.PUT();">Update Maze</button>
+                <button onClick="setStyleDisplayDeleteMazeModal('flex')">Delete Maze</button>
+                <span id="delete-maze-modal" class="delete-maze-modal" style="display:none;">
+                    <h2>Are you sure you want to delete the maze</h2>
+                    <div>
+                        <button onclick="MazeDB.DELETE();setStyleDisplayDeleteMazeModal('none');">YES</button>
+                        <button onclick="setStyleDisplayDeleteMazeModal('none');">NO</button>
+                    </div>
+                </span>
             </div>
             <br>
 
             <!-- MAPF variables -->
             <p><b>MAPF Variables</b></p>
-
-            <div class="grid-2 center" style="width:75%; text-align: left;">
-                <div class="vertical-center">
-                    Number of Agents (Max. 15):
-                </div>
-                <div>
-                    <input id="numAgents" type="number" min="1" max="15" value="1" onchange="updateNumAgentsDropdown()">
-                </div>
-            </div>
 
             <div class="grid-2 center" style="width:75%; text-align: left;">
                 <div class="vertical-center">
@@ -204,6 +202,15 @@
                 </div>
             </div>
 
+            <div class="grid-2 center" style="width:75%; text-align: left;">
+                <div class="vertical-center">
+                    Number of Agents (Max. 15):
+                </div>
+                <div>
+                    <input id="numAgents" type="number" min="1" max="15" value="1" onchange="updateNumAgentsDropdown()">
+                </div>
+            </div>
+
             <!-- Place Agent -->
             <div class="grid-2 center" style="width:75%; text-align: left;">
                 <div class="vertical-center">
@@ -211,6 +218,7 @@
                 </div>
                 <div>
                     <select id="agent_dropdown">
+                        <option value="" disabled selected hidden>Make selection above</option>
                     </select>
                 </div>
             </div>

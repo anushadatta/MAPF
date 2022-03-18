@@ -11,7 +11,7 @@ const onload = async () => {
 
     MazeDB.setMazeDB(mazesAwsData);
     updateNumAgentsDropdown();
-}
+};
 
 // Authentication: Global variables
 let authObject = {
@@ -28,18 +28,15 @@ const authOnLoad = () => {
         authObject["id_token"] = params.get("id_token");
         // authObject["access_token"] = params.get("access_token");
         // authObject["refresh_token"] = params.get("refresh_token");
-
     } else {
         //   not logged in
         console.log("not logged in");
     }
 };
 
-
 // update agents count dropdown
 // MAPF variables "Select Number of Agents (Max. 15):" dropdown
 const updateNumAgentsDropdown = () => {
-
     // clear maze every time number of agents updated by user
     clear_flag = true;
 
@@ -64,11 +61,10 @@ const updateNumAgentsDropdown = () => {
         optionNode.setAttribute("value", i);
         dropdownNode.appendChild(optionNode);
     }
-}
+};
 
 // buttons select/unselect
 const button_selection_css = (selected_button_id, unselected_button_id) => {
-
     // unselect other buttons
     unselected_button = document.getElementById(unselected_button_id[0]);
     unselected_button.classList.remove("button-clicked");
@@ -76,10 +72,10 @@ const button_selection_css = (selected_button_id, unselected_button_id) => {
     unselected_button = document.getElementById(unselected_button_id[1]);
     unselected_button.classList.remove("button-clicked");
 
-    // set button as selected 
+    // set button as selected
     selected_button = document.getElementById(selected_button_id);
     selected_button.classList.add("button-clicked");
-}
+};
 
 // make api call and return value
 const api = async (method, endpoint, body) => {
@@ -87,7 +83,7 @@ const api = async (method, endpoint, body) => {
         "https://r0izk68gbl.execute-api.ap-southeast-1.amazonaws.com/Stage";
     const myHeaders = new Headers();
 
-    console.log(authObject["id_token"])
+    console.log(authObject["id_token"]);
     myHeaders.append("Authorization", authObject["id_token"]);
     const raw = JSON.stringify(body);
 
@@ -99,16 +95,19 @@ const api = async (method, endpoint, body) => {
     if (method != "GET") {
         requestOptions["body"] = raw;
         myHeaders.append("Content-Type", "application/json");
-
     }
 
     requestOptions["headers"] = myHeaders;
     // requestOptions["mode"] = 'no-cors';
 
-    console.log(`${BASE_URL}/${endpoint}`, requestOptions)
+    // console.log(`${BASE_URL}/${endpoint}`, requestOptions)
     const res = await (
         await fetch(`${BASE_URL}/${endpoint}`, requestOptions)
     ).json();
 
     return res;
+};
+
+const setStyleDisplayDeleteMazeModal = (displayType) => {
+    document.getElementById("delete-maze-modal").style.display = displayType;
 };
