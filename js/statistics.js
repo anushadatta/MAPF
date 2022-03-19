@@ -2,66 +2,6 @@ let scatterChart;
 let lineChartTime;
 let lineChartCost;
 let statsData;
-// // Statistics for Maze X (x: agent, y:cost/time)
-// var selected_maze = "Maze X";
-
-// var cost = [
-//   { x: 1, y: 7 },
-//   { x: 1, y: 7 },
-//   { x: 3, y: 8 },
-//   { x: 4, y: 9 },
-//   { x: 5, y: 9 },
-//   { x: 8, y: 11 },
-// ];
-
-// var time = [
-//   { x: 2, y: 12 },
-//   { x: 2, y: 11.5 },
-//   { x: 2, y: 11 },
-//   { x: 6, y: 3 },
-//   { x: 7, y: 1 },
-//   { x: 9, y: 14 },
-//   { x: 10, y: 14 },
-// ];
-
-// // Generate drop down for all saved mazes
-// function getSavedMazes(data) {
-//   // TODO: Retrieve list of mazes from cloud DB
-//   // get maze names from AWS Maze DB
-//   var values = [];
-//   for (const maze_record in data) {
-//     values.push(maze_record["maze_name"]);
-//   }
-
-//   // Create drop down menu for saved mazes retrieved above
-//   var select = document.createElement("select");
-//   select.name = "maze_dropdown";
-//   select.id = "maze_dropdown";
-
-//   for (const val of values) {
-//     var option = document.createElement("option");
-//     option.value = val;
-//     option.text = val.charAt(0).toUpperCase() + val.slice(1);
-//     select.appendChild(option);
-//   }
-
-//   var label = document.createElement("label");
-//   label.innerHTML = "Choose saved maze: ";
-//   label.htmlFor = "maze_dropdown";
-
-//   document
-//     .getElementById("select-maze-statistics")
-//     .appendChild(label)
-//     .appendChild(select);
-// }
-
-// // Get statistics for selected maze from drop down
-// function getStats() {
-//   // Get selected maze from drop down
-//   var selected_maze = document.getElementById("maze_dropdown").value;
-
-//   // TODO: Retrieve statistics from cloud DB
-// }
 
 function updateStats() {
     if (scatterChart) {
