@@ -18,6 +18,9 @@ function updateStats() {
     const mazeFilter = document.getElementById("stats_maze_dropdown").value;
     const heuristicFilter = document.getElementById("stats_heuristic").value;
 
+    var mazeNameEle = document.getElementById("stats_maze_dropdown");
+    var mazeName = mazeNameEle.options[mazeNameEle.selectedIndex].text;
+
     const MAX_NUM_AGENTS = 15;
 
     let labels = [];
@@ -63,8 +66,7 @@ function updateStats() {
         }
     }
 
-
-
+    console.log("stats data", statsData);
 
     // Plot statistics on scatterChart
     scatterChart = new Chart("scatter-chart", {
@@ -95,7 +97,7 @@ function updateStats() {
             plugins: {
                 title: {
                     display: true,
-                    text: "Execution Statistics for " + "selected_maze",
+                    text: "Execution Statistics for " + mazeName,
                 },
             },
             legend: { display: true },
@@ -151,12 +153,46 @@ function updateStats() {
         datasetTime.push(datasetRecordTime);
         datasetCost.push(datasetRecordCost);
     }
+
     console.log(chartDataJson)
+
     const configTime = {
         type: 'line',
         data: {
             labels,
             datasets: datasetTime
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Heuristic Performance Statistics for " + mazeName,
+                },
+            },
+            legend: { display: true },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Number of Agents",
+                    },
+                    min: 0,
+                    max: 15,
+                    ticks: {
+                        stepSize: 1,
+                    },
+                },
+
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: "Average Execution Time",
+                    },
+                    min: 0,
+                },
+            },
         },
     };
     const configCost = {
@@ -165,7 +201,39 @@ function updateStats() {
             labels,
             datasets: datasetCost
         },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Heuristic Performance Statistics for " + mazeName,
+                },
+            },
+            legend: { display: true },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Number of Agents",
+                    },
+                    min: 0,
+                    max: 15,
+                    ticks: {
+                        stepSize: 1,
+                    },
+                },
+
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: "Average Execution Cost",
+                    },
+                    min: 0,
+                },
+            },
+        },
     };
-    lineChartTime = new Chart("time-line-chart", configTime)
     lineChartCost = new Chart("cost-line-chart", configCost)
+    lineChartTime = new Chart("time-line-chart", configTime)
 }
