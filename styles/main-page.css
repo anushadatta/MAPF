@@ -116,24 +116,24 @@ div.sticky-navbar {
     font-family: sans-serif;
     margin-top: 15px;
     margin-left: 5px;
-  }
-  
+}
+
 .solution-badges .name {
     background: #333;
     color: white;
     border-radius: 5px 0px 0px 5px;
     padding: 10px 15px;
     font-weight: bolder;
-  }
-  
+}
+
 .solution-badges .score {
     background: #dcdde1;
     color: #333;
     border-radius: 0px 5px 5px 0px;
     padding: 10px 15px;
     font-weight: bolder;
-  }
-  
+}
+
 /* Media Queries */
 
 /* Small Screens */
@@ -142,17 +142,21 @@ div.sticky-navbar {
     .showcase::after {
         height: 50vh;
     }
+
     .showcase .arrow {
         display: none;
     }
+
     .content {
         top: 5%;
         margin-top: 5px;
     }
+
     .content .logo {
         height: 140px;
         width: 140px;
     }
+
     .grid-3,
     .grid-2 {
         grid-template-columns: 1fr;
@@ -162,10 +166,12 @@ div.sticky-navbar {
 /* Landscape */
 
 @media (max-height: 500px) {
+
     .content .title,
     .content .text {
         display: none;
     }
+
     .content {
         top: 0;
     }
@@ -180,7 +186,7 @@ div.sticky-navbar {
     height: auto;
 }
 
-.delete-maze-modal{
+.delete-maze-modal {
 
     display: flex;
     flex-direction: column;
@@ -191,12 +197,23 @@ div.sticky-navbar {
     width: 40%;
     height: 30%;
     z-index: 0;
-    left: 0; 
-    right: 0; 
-    margin-left: auto; 
-    margin-right: auto; 
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
+}
+
+#login-link {
+    position: absolute;
+    z-index: 1;
+    left: 95%;
+    padding: 5px;
+    border: 1px solid white;
+    color: white;
+    text-decoration: none;
+
 }
