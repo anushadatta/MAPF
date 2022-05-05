@@ -188,9 +188,9 @@ div.sticky-navbar {
     align-items: center;
     justify-content: center;
     background: white;
-    width: 60%;
+    width: 40%;
     height: 30%;
-    z-index: 2;
+    z-index: 0;
     left: 0; 
     right: 0; 
     margin-left: auto; 

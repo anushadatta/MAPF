@@ -74,29 +74,6 @@
         </ul>
     </div>
 
-    <!-- About -->
-    <section id="about" class="bg-light">
-        <div class="container">
-            <h1>ABOUT</h1>
-
-            <div class="grid-2">
-                <div class="center">
-                    <img src="assets/about-grid.jpeg" alt="Profile Picture">
-                </div>
-
-                <div>
-                    <h3>Conflict Based Search for Optimal MAPF</h3>
-                    <p> Introduction to MAPF application.
-                        <br> <br>
-                        Instructions to use application.
-                        View, add (user input), edit, and delete saved mazes on cloud DB.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <hr class="center">
-    </section>
-
     <!-- MAPF -->
     <section id="mapf" class="bg-light">
         <div class="container">
@@ -175,10 +152,11 @@
                 <button onClick="MazeDB.PUT();">Update Maze</button>
                 <button onClick="setStyleDisplayDeleteMazeModal('flex')">Delete Maze</button>
                 <span id="delete-maze-modal" class="delete-maze-modal" style="display:none;">
-                    <h2>Are you sure you want to delete the maze</h2>
+                    <h2>Are you sure you want to delete this maze?</h2>
                     <div>
-                        <button onclick="MazeDB.DELETE();setStyleDisplayDeleteMazeModal('none');">YES</button>
-                        <button onclick="setStyleDisplayDeleteMazeModal('none');">NO</button>
+                        <button onclick="setStyleDisplayDeleteMazeModal('none');">CANCEL</button>
+                        <button onclick="MazeDB.DELETE();setStyleDisplayDeleteMazeModal('none');" style="background: #B22222;
+                            color: #f4f4f4;">DELETE</button>
                     </div>
                 </span>
             </div>
