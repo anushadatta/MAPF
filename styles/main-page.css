@@ -210,7 +210,7 @@ div.sticky-navbar {
 #login-link {
     position: absolute;
     z-index: 1;
-    left: 90%;
+    right: 2%;
     padding: 5px;
     border: 1px solid white;
     color: white;
