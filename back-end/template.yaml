@@ -1,0 +1,186 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-test
+
+  Sample SAM Template for sam-test
+
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: python3.9
+    Handler: app.lambda_handler
+    Architectures:
+        - x86_64
+
+
+
+Resources:
+  GETMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/GET/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  
+  POSTMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/POST/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+
+  
+  PUTMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/PUT/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          TABLE: !Ref MazeTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  
+  DELETEMazeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: maze/DELETE/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          MAZE_TABLE: !Ref MazeTable
+          STATS_TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /maze
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+
+  SolverFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: mapf/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /solve
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  
+  StatisticsFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: statistics/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+      Environment:
+        Variables:
+          TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /stats
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  UserMapfDataFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: user_mapf_data/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RunStatisticsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MazeTable
+      Environment:
+        Variables:
+          MAZE_TABLE: !Ref MazeTable
+          STATS_TABLE: !Ref RunStatisticsTable
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /user_mapf_data
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: default
+      Cors: "'*'"
+      Name: MapfGateway
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:ap-southeast-1:590170059730:userpool/ap-southeast-1_kCpcekVL4
+
+  MazeTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: MazeTable
+    Properties:
+      PrimaryKey:
+        Name: maze_id
+        Type: String
+
+  RunStatisticsTable:
+    Type: AWS::Serverless::SimpleTable
+    TableName: StatisticsTable
+    Properties:
+      PrimaryKey:
+        Name: run_id
+        Type: String
