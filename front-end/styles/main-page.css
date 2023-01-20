@@ -1,0 +1,219 @@
+/* Overriding default styles */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+
+/* Full screen landing page */
+
+.showcase::after {
+    content: '';
+    height: 100vh;
+    width: 100%;
+    background-image: url("../assets/background.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    transition: all 1000ms;
+    opacity: 0.35;
+}
+
+
+/* Landing page content */
+
+.content {
+    position: absolute;
+    z-index: 1;
+    top: 10%;
+    left: 50%;
+    margin-top: 140px;
+    margin-left: -300px;
+    width: 600px;
+    height: 350px;
+    text-align: center;
+    transition: all 1000ms;
+}
+
+.content .title {
+    font-size: 4.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: normal;
+}
+
+.content .text {
+    font-size: 1.2rem;
+    line-height: 0.1;
+    margin-top: 1.5rem;
+}
+
+.showcase .arrow {
+    height: 30px;
+    position: absolute;
+    z-index: 1;
+    bottom: 5%;
+    left: 50%;
+    transition: all 1000ms;
+}
+
+
+/* Main Navigation Bar */
+
+.sticky-navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.sticky-navbar li {
+    float: left;
+}
+
+.sticky-navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 22px;
+    text-decoration: none;
+}
+
+.sticky-navbar li a:hover {
+    background-color: #111;
+}
+
+div.sticky-navbar {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
+
+.navbar-logo {
+    height: 28px;
+    width: 28px;
+    float: right;
+    margin: 15px;
+}
+
+/* Main MAZE */
+#main-maze {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Badges */
+.solution-badges {
+    display: inline-block;
+    font-family: sans-serif;
+    margin-top: 15px;
+    margin-left: 5px;
+}
+
+.solution-badges .name {
+    background: #333;
+    color: white;
+    border-radius: 5px 0px 0px 5px;
+    padding: 10px 15px;
+    font-weight: bolder;
+}
+
+.solution-badges .score {
+    background: #dcdde1;
+    color: #333;
+    border-radius: 0px 5px 5px 0px;
+    padding: 10px 15px;
+    font-weight: bolder;
+}
+
+/* Media Queries */
+
+/* Small Screens */
+
+@media (max-width: 650px) {
+    .showcase::after {
+        height: 50vh;
+    }
+
+    .showcase .arrow {
+        display: none;
+    }
+
+    .content {
+        top: 5%;
+        margin-top: 5px;
+    }
+
+    .content .logo {
+        height: 140px;
+        width: 140px;
+    }
+
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Landscape */
+
+@media (max-height: 500px) {
+
+    .content .title,
+    .content .text {
+        display: none;
+    }
+
+    .content {
+        top: 0;
+    }
+}
+
+
+/* Making images responsive - MAPF Introduction */
+
+#about img {
+    max-width: 90%;
+    display: inline-block;
+    height: auto;
+}
+
+.delete-maze-modal {
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    width: 40%;
+    height: 30%;
+    z-index: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#login-link {
+    position: absolute;
+    z-index: 1;
+    right: 2%;
+    padding: 5px;
+    border: 1px solid white;
+    color: white;
+    text-decoration: none;
+
+}

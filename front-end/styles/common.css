@@ -1,0 +1,109 @@
+/* Overriding default styles */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* Helper styles */
+
+.container {
+    max-width: 960px;
+    margin: auto;
+    overflow: hidden;
+    padding: 4rem 1rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-gap: 5px;
+    /* grid-template-columns: repeat(3, 1fr); */
+    grid-template-columns: 0.7fr 320px  0.5fr;
+}
+
+.grid-2 {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.center {
+    text-align: center;
+    margin: auto;
+}
+
+.vertical-center {
+    display:flex;
+    align-items: center;
+}
+
+.bg-light {
+    background: #f4f4f4;
+    color: #333;
+}
+
+.bg-dark {
+    background: #333;
+    color: #f4f4f4;
+}
+
+/* Input Text Box */
+input, select {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
+  }
+
+/* Button */
+button {
+    background: #dcdde1;
+    color: #333;
+    border-radius: 0.2rem;
+    border: none;
+    padding: 10px;
+    margin: 4px;
+    font-weight: 600;
+  }
+
+button:hover {
+    background-color: #333; 
+    color: #e7e7e7;
+}
+
+.button-clicked {
+    border: 2px solid #333; 
+}
+
+/* Horizontal Rule */
+
+hr {
+    width: 70%;
+    text-align-last: center;
+    border: 1.5px solid #c0c0c0;
+}
+
+/* Contact icons */
+
+#contact i {
+    font-size: 30px;
+    margin: 15px;
+    color: #333;
+}
+
+/* Website Footer */
+
+footer {
+    padding: 2.2rem;
+}
+
+footer p {
+    margin: 0;
+}
